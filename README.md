@@ -1,10 +1,10 @@
 
 <!-- badges: start -->
 
-[![R build
-status](https://github.com/oezgesahin/vineclust/workflows/R-CMD-check/badge.svg)](https://github.com/oezgesahin/vineclust/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/vineclust)](https://CRAN.R-project.org/package=vineclust)
+[![R-CMD-check](https://github.com/oezgesahin/vineclust/workflows/R-CMD-check/badge.svg)](https://github.com/oezgesahin/vineclust/actions)
+[![codecov](https://codecov.io/gh/oezgesahin/vineclust/branch/main/graph/badge.svg?token=EUTCCS3B5U)](https://codecov.io/gh/oezgesahin/vineclust)
 <!-- badges: end -->
 
 # vineclust: Model-Based Clustering with Vine Copulas
@@ -229,8 +229,8 @@ fit_cvine <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, is_cvine=1)
 table(fit_cvine$cluster, data_wisc$V2) 
 #>    
 #>       B   M
-#>   1 325  20
-#>   2  32 192
+#>   1  32 192
+#>   2 325  20
 ```
 
 ``` r

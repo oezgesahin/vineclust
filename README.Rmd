@@ -13,8 +13,9 @@ knitr::opts_chunk$set(
 ```
 
 <!-- badges: start -->
-[![R build status](https://github.com/oezgesahin/vineclust/workflows/R-CMD-check/badge.svg)](https://github.com/oezgesahin/vineclust/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/vineclust)](https://CRAN.R-project.org/package=vineclust)
+[![R-CMD-check](https://github.com/oezgesahin/vineclust/workflows/R-CMD-check/badge.svg)](https://github.com/oezgesahin/vineclust/actions)
+[![codecov](https://codecov.io/gh/oezgesahin/vineclust/branch/main/graph/badge.svg?token=EUTCCS3B5U)](https://codecov.io/gh/oezgesahin/vineclust)
 <!-- badges: end -->
 
 # vineclust: Model-Based Clustering with Vine Copulas
