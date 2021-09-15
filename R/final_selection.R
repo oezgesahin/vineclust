@@ -1,10 +1,11 @@
 #' internal function
 #' @noRd
-final_selection <- function(data, total_cluster, final_cvine, final_vinestr, final_trunclevel, mix_probs, p_probs, iteration, init_method,
-                            final_mar, final_bicop){
+final_selection <- function(data, total_cluster, final_cvine, final_vinestr, final_trunclevel, mix_probs, p_probs,
+                            iteration, init_method, final_mar, final_bicop){
   if(is.na(final_cvine)) final_cvine <- 0
   if(is.na(final_trunclevel)) final_trunclevel <- ncol(data) - 1
-  if(all(is.na(final_bicop))) final_bicop <- c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,20,23,24,26,27,28,30,33,34,36,37,38,40)
+  if(all(is.na(final_bicop))) final_bicop <- c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,
+                                               20,23,24,26,27,28,30,33,34,36,37,38,40)
   data <- cbind(data, apply(p_probs,1,function(x) which(x==max(x))))
   total_obs <- dim(data)[1]
   total_features <- dim(data)[2]-1
@@ -36,9 +37,11 @@ final_selection <- function(data, total_cluster, final_cvine, final_vinestr, fin
     u_data[,,j] <- sapply(1:total_features, function(x) pdf_cdf_quant_margin(data[,x],marginal_fams[x,j],
                                                                        marginal_params[,x,j], 'cdf'))
     if(is.matrix(final_vinestr)){
-      fit_rvine <- VineCopula::RVineCopSelect(u_data[data[,(total_features+1)] == j,,j], familyset=final_bicop, Matrix=final_vinestr, trunclevel=final_trunclevel)
+      fit_rvine <- VineCopula::RVineCopSelect(u_data[data[,(total_features+1)] == j,,j], familyset=final_bicop,
+                                              Matrix=final_vinestr, trunclevel=final_trunclevel)
     }else{
-      fit_rvine <- VineCopula::RVineStructureSelect(u_data[data[,(total_features+1)] == j,,j], familyset=final_bicop, type=final_cvine, trunclevel=final_trunclevel)
+      fit_rvine <- VineCopula::RVineStructureSelect(u_data[data[,(total_features+1)] == j,,j], familyset=final_bicop,
+                                                    type=final_cvine, trunclevel=final_trunclevel)
     }
     vine_structures[,,j] <- fit_rvine$Matrix
     family_sets[,,j] <- fit_rvine$family
@@ -70,15 +73,15 @@ final_selection <- function(data, total_cluster, final_cvine, final_vinestr, fin
     total_margin_dens[,j] <- density
   }
   lik_points <-sapply(1:total_cluster, function(j) mix_probs[j]*total_margin_dens[,j]*rvine_densities[,j])
-  lik_per_clus <- apply(lik_points, 1, sum)
-  z_values <- lik_points/rep(lik_per_clus, total_cluster)
-  loglik <- sum(log(lik_per_clus))
+  lik_per_obs <- apply(lik_points, 1, sum)
+  z_values <- lik_points/rep(lik_per_obs, total_cluster)
+  loglik <- sum(log(lik_per_obs))
   total_mar_pars <- 0
   for(j in 1:total_cluster){
     for(i in 1:total_features){
-      if(marginal_fams[i,j]=='sstd'){total_mar_pars <- total_mar_pars + 4}
-      else if(marginal_fams[i,j]=='snorm'){total_mar_pars <- total_mar_pars + 3}
-      else{total_mar_pars + 2}
+      if(marginal_fams[i,j]=='Skew Normal'  || marginal_fams[i,j]=='Student-t'){total_mar_pars <- total_mar_pars + 3}
+      else if(marginal_fams[i,j]=='Skew Student-t'){total_mar_pars <- total_mar_pars + 4}
+      else{total_mar_pars <- total_mar_pars + 2}
     }
   }
   total_cop_pars <- sum(one_par)+2*sum(two_par)
@@ -96,8 +99,8 @@ final_selection <- function(data, total_cluster, final_cvine, final_vinestr, fin
   }
   else{icl <- bic_cop}
   output <- list("loglik"=loglik, "bic"=bic_cop, "icl"=icl, "init_clustering"=init_method, "iteration"=iteration,
-                 "total_pars"=total_pars,"mixture_prob"=mix_probs, "margin" = marginal_fams, "marginal_param"=marginal_params,
-                 "vine_structure"=vine_structures, "bicop_familyset"=family_sets, "bicop_param"=cop_params,
-                 "bicop_param2"=cop_params_2, "z_values"=z_values)
+                 "total_pars"=total_pars,"mixture_prob"=mix_probs, "margin" = marginal_fams,
+                 "marginal_param"=marginal_params, "vine_structure"=vine_structures, "bicop_familyset"=family_sets,
+                 "bicop_param"=cop_params, "bicop_param2"=cop_params_2, "z_values"=z_values)
   output
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/vcmm.R
 \name{vcmm}
 \alias{vcmm}
-\title{Model-based clustering with vine copulas}
+\title{Model-Based Clustering with Vine Copulas}
 \usage{
 vcmm(
   data,
@@ -23,26 +23,32 @@ If a matrix or data frame, rows correspond to observations (i) and columns corre
 
 \item{total_comp}{An integer specifying the numbers of mixture components (clusters)}
 
-\item{is_cvine}{An integer specifying if the type of components' vine tree structure is C-vine before/after the ECM phase of clustering.
+\item{is_cvine}{An integer specifying if the type of components' vine tree structure is C-vine
+before/after the ECM phase of clustering.
 \itemize{
 \item 0 = R-vine (default)
 \item 1 = C-vine
 }}
 
-\item{vinestr}{A matrix specifying vine tree structures before/after the ECM phase of clustering. The default is automatic selection.
+\item{vinestr}{A matrix specifying vine tree structures before/after the ECM phase of clustering.
+The default is automatic selection.
 \link[VineCopula]{RVineMatrixCheck} checks for a valid R-vine matrix.}
 
 \item{trunclevel}{An integer showing the level of truncation for vine tree structures before the ECM phase of clustering.
 The default is 1.}
 
-\item{mar}{A vector of character strings indicating the parametric univariate marginal distributions to be fitted before/after the ECM phase of clustering.
-The default is c('cauchy','gamma','llogis','lnorm','logis','norm','snorm','std', 'sstd'). Other distributions not (yet) allowed.}
+\item{mar}{A vector of character strings indicating the parametric univariate marginal distributions
+to be fitted before/after the ECM phase of clustering.
+The default is c('cauchy','gamma','llogis','lnorm','logis','norm','snorm','std', 'sstd').
+Other distributions not (yet) allowed.}
 
-\item{bicop}{A vector of integers denoting the parametric bivariate copula families to be fitted before/after the ECM phase of clustering.
+\item{bicop}{A vector of integers denoting the parametric bivariate copula families to be fitted
+before/after the ECM phase of clustering.
 The default is c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,20,23,24,26,27,28,30,33,34,36,37,38,40).
 \link[VineCopula]{BiCop} describes the available families with their specifications.}
 
-\item{methods}{A vector of character strings indicating initial clustering method(s) to have a partition for model selection before the ECM phase of clustering. Current options:
+\item{methods}{A vector of character strings indicating initial clustering method(s) to have a partition
+for model selection before the ECM phase of clustering. Current options:
 \itemize{
 \item 'kmeans' (default)
 \item c('kmeans', 'gmm', 'hcVVV')
@@ -57,13 +63,15 @@ An object of class vcmm result. It contains the elements
 \describe{
 \item{cluster}{the vector with the classification of observations}
 \item{output}{a list containing the fitted VCMM.}
-} Use \code{print.vcmm_res()} to obtain log-likelihood, BIC, ICL, number of estimated parameters, initial clustering method used and total
-number of ECM iterations for the fitted VCMM. \code{summary.vcmm_res()} shows the fitted vine tree structrues and univariate marginal distributions,
-bivariate copula families with the estimated parameters, as well as mixture proportions of each component.
+} Use \code{print.vcmm_res()} to obtain log-likelihood, BIC, ICL, number of estimated parameters, initial clustering method used
+and total number of ECM iterations for the fitted VCMM. \code{summary.vcmm_res()} shows the fitted vine tree structures and
+univariate marginal distributions, bivariate copula families with the estimated parameters, as well as
+mixture proportions of each component.
 }
 \description{
 It fits vine copula based mixture model distributions to the continuous data
-for a given number of components as described in Sahin and Czado (2021) and use its results for clustering.
+for a given number of components as described in Sahin and Czado (2021)
+and use its results for clustering.
 }
 \examples{
 # Simulate 3-dimensianal data from parametric vine copula based mixture model
@@ -92,6 +100,7 @@ x_data <- rvcmm(dims, obs, margin, margin_pars, RVMs)
 # Example-1: fit parametric 3 dimensional R-vine copula based mixture model with 2 components,
 # using all univariate marginal distributions and bivariate copula families allowed,
 # initial partition of k-means
+\dontrun{
 fit <- vcmm(x_data[,1:3], total_comp = 2)
 print(fit)
 summary(fit)
@@ -107,12 +116,14 @@ RVMs_fitted[[2]] <- VineCopula::RVineMatrix(Matrix=fit$output$vine_structure[,,2
                         family=fit$output$bicop_familyset[,,2],
                         par=fit$output$bicop_param[,,2],
                         par2=fit$output$bicop_param2[,,2])
-dvcmm(c(1, 2, 3), fit$output$margin, fit$output$marginal_param, RVMs_fitted, fit$output$mixture_prob)
+dvcmm(c(1, 2, 3), fit$output$margin, fit$output$marginal_param,
+RVMs_fitted, fit$output$mixture_prob)
+}
 
 }
 \references{
-Sahin and Czado (2021), Vine copula mixture models and clustering for non-Gaussian data,
-arXiv: 2102.03257
+Sahin and Czado (2021), Vine copula mixture models and clustering for non-Gaussian data, Econometrics and Statistics.
+doi: 10.1016/j.ecosta.2021.08.011
 }
 \seealso{
 \code{\link[=dvcmm]{dvcmm()}}, \code{\link[=rvcmm]{rvcmm()}}

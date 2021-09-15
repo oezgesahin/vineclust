@@ -57,21 +57,13 @@ test_that("fixed mar/bicop selection works", {
   )
 })
 
-test_that("other clustering methods work", {
-  for (met in c("gmm", "hcVVV")) {
-    expect_type(
-      vcmm(x_data, total_comp=2, methods=met)$output$margin,
-      "character"
-    )
-  }
-})
-
 test_that("other threshold works", {
   expect_type(
     vcmm(x_data, total_comp=2, threshold=0.1)$output$margin,
     "character"
   )
 })
+
 
 test_that("other maxit works", {
   expect_type(

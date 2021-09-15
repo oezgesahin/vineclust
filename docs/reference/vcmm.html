@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Model-based clustering with vine copulas — vcmm • vineclust</title>
+<title>Model-Based Clustering with Vine Copulas — vcmm • vineclust</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,10 @@
 
 
 
-<meta property="og:title" content="Model-based clustering with vine copulas — vcmm" />
+<meta property="og:title" content="Model-Based Clustering with Vine Copulas — vcmm" />
 <meta property="og:description" content="It fits vine copula based mixture model distributions to the continuous data
-for a given number of components as described in Sahin and Czado (2021) and use its results for clustering." />
+for a given number of components as described in Sahin and Czado (2021)
+and use its results for clustering." />
 
 
 
@@ -73,7 +74,7 @@ for a given number of components as described in Sahin and Czado (2021) and use 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">vineclust</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -112,14 +113,15 @@ for a given number of components as described in Sahin and Czado (2021) and use 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Model-based clustering with vine copulas</h1>
+    <h1>Model-Based Clustering with Vine Copulas</h1>
     <small class="dont-index">Source: <a href='https://github.com/oezgesahin/vineclust/blob/master/R/vcmm.R'><code>R/vcmm.R</code></a></small>
     <div class="hidden name"><code>vcmm.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>It fits vine copula based mixture model distributions to the continuous data
-for a given number of components as described in Sahin and Czado (2021) and use its results for clustering.</p>
+for a given number of components as described in Sahin and Czado (2021)
+and use its results for clustering.</p>
     </div>
 
     <pre class="usage"><span class='fu'>vcmm</span><span class='op'>(</span>
@@ -149,14 +151,16 @@ If a matrix or data frame, rows correspond to observations (i) and columns corre
     </tr>
     <tr>
       <th>is_cvine</th>
-      <td><p>An integer specifying if the type of components' vine tree structure is C-vine before/after the ECM phase of clustering.</p><ul>
+      <td><p>An integer specifying if the type of components' vine tree structure is C-vine
+before/after the ECM phase of clustering.</p><ul>
 <li><p>0 = R-vine (default)</p></li>
 <li><p>1 = C-vine</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>vinestr</th>
-      <td><p>A matrix specifying vine tree structures before/after the ECM phase of clustering. The default is automatic selection.
+      <td><p>A matrix specifying vine tree structures before/after the ECM phase of clustering.
+The default is automatic selection.
 <a href='https://rdrr.io/pkg/VineCopula/man/RVineMatrixCheck.html'>RVineMatrixCheck</a> checks for a valid R-vine matrix.</p></td>
     </tr>
     <tr>
@@ -166,18 +170,22 @@ The default is 1.</p></td>
     </tr>
     <tr>
       <th>mar</th>
-      <td><p>A vector of character strings indicating the parametric univariate marginal distributions to be fitted before/after the ECM phase of clustering.
-The default is c('cauchy','gamma','llogis','lnorm','logis','norm','snorm','std', 'sstd'). Other distributions not (yet) allowed.</p></td>
+      <td><p>A vector of character strings indicating the parametric univariate marginal distributions
+to be fitted before/after the ECM phase of clustering.
+The default is c('cauchy','gamma','llogis','lnorm','logis','norm','snorm','std', 'sstd').
+Other distributions not (yet) allowed.</p></td>
     </tr>
     <tr>
       <th>bicop</th>
-      <td><p>A vector of integers denoting the parametric bivariate copula families to be fitted before/after the ECM phase of clustering.
+      <td><p>A vector of integers denoting the parametric bivariate copula families to be fitted
+before/after the ECM phase of clustering.
 The default is c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,20,23,24,26,27,28,30,33,34,36,37,38,40).
 <a href='https://rdrr.io/pkg/VineCopula/man/BiCop.html'>BiCop</a> describes the available families with their specifications.</p></td>
     </tr>
     <tr>
       <th>methods</th>
-      <td><p>A vector of character strings indicating initial clustering method(s) to have a partition for model selection before the ECM phase of clustering. Current options:</p><ul>
+      <td><p>A vector of character strings indicating initial clustering method(s) to have a partition
+for model selection before the ECM phase of clustering. Current options:</p><ul>
 <li><p>'kmeans' (default)</p></li>
 <li><p>c('kmeans', 'gmm', 'hcVVV')</p></li>
 </ul></td>
@@ -198,13 +206,14 @@ The default is c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,20,23,24,26,27,28,30,33,34,36
 <dt>cluster</dt><dd><p>the vector with the classification of observations</p></dd>
 <dt>output</dt><dd><p>a list containing the fitted VCMM.</p></dd>
 
-</dl><p>Use <code>print.vcmm_res()</code> to obtain log-likelihood, BIC, ICL, number of estimated parameters, initial clustering method used and total
-number of ECM iterations for the fitted VCMM. <code>summary.vcmm_res()</code> shows the fitted vine tree structrues and univariate marginal distributions,
-bivariate copula families with the estimated parameters, as well as mixture proportions of each component.</p>
+</dl><p>Use <code>print.vcmm_res()</code> to obtain log-likelihood, BIC, ICL, number of estimated parameters, initial clustering method used
+and total number of ECM iterations for the fitted VCMM. <code>summary.vcmm_res()</code> shows the fitted vine tree structures and
+univariate marginal distributions, bivariate copula families with the estimated parameters, as well as
+mixture proportions of each component.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Sahin and Czado (2021), Vine copula mixture models and clustering for non-Gaussian data,
-arXiv: 2102.03257</p>
+    <p>Sahin and Czado (2021), Vine copula mixture models and clustering for non-Gaussian data, Econometrics and Statistics.
+doi: 10.1016/j.ecosta.2021.08.011</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='vcmm_methods.html'>dvcmm()</a></code>, <code><a href='vcmm_methods.html'>rvcmm()</a></code></p></div>
@@ -236,104 +245,12 @@ arXiv: 2102.03257</p>
 <span class='co'># Example-1: fit parametric 3 dimensional R-vine copula based mixture model with 2 components,</span>
 <span class='co'># using all univariate marginal distributions and bivariate copula families allowed,</span>
 <span class='co'># initial partition of k-means</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'>vcmm</span><span class='op'>(</span><span class='va'>x_data</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>]</span>, total_comp <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning:  In RVineLogLik: 1000 of the evaluation points (100%) contain NAs.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning:  In RVineLogLik: 1000 of the evaluation points (100%) contain NAs.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning:  In RVineLogLik: 1000 of the evaluation points (100%) contain NAs.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning:  In RVineLogLik: 1000 of the evaluation points (100%) contain NAs.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning:  In RVineLogLik: 1000 of the evaluation points (100%) contain NAs.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning:  In RVineLogLik: 1000 of the evaluation points (100%) contain NAs.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning:  In RVineLogLik: 1000 of the evaluation points (100%) contain NAs.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning:  In RVineLogLik: 1000 of the evaluation points (100%) contain NAs.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='output co'>#&gt; <span class='warning'>Warning: NaNs produced</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; logLik = -6236.56   BIC = 12542.2   ICL = 12621.53   npars = 10   initial clustering = kmeans   ECM iterations = 10   </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $margins
-#&gt;      [,1]        [,2]         
-#&gt; [1,] "Lognormal" "Normal"     
-#&gt; [2,] "Normal"    "Gamma"      
-#&gt; [3,] "Gamma"     "Skew Normal"
-#&gt; 
-#&gt; $marginal_pars
-#&gt; , , 1
-#&gt; 
-#&gt;           [,1]     [,2]      [,3]
-#&gt; [1,] 1.4708391 17.44715 1.1544432
-#&gt; [2,] 0.3774762  4.70979 0.2291231
-#&gt; [3,]        NA       NA        NA
-#&gt; [4,]        NA       NA        NA
-#&gt; 
-#&gt; , , 2
-#&gt; 
-#&gt;           [,1]     [,2]     [,3]
-#&gt; [1,] 0.6158585 1.125941 2.285679
-#&gt; [2,] 1.6728741 0.306567 1.381322
-#&gt; [3,]        NA       NA 3.295229
-#&gt; [4,]        NA       NA       NA
-#&gt; 
-#&gt; 
-#&gt; $copula
-#&gt; , , 1
-#&gt; 
-#&gt;      [,1] [,2] [,3]
-#&gt; [1,]    0    0    0
-#&gt; [2,]    6    0    0
-#&gt; [3,]    5   10    0
-#&gt; 
-#&gt; , , 2
-#&gt; 
-#&gt;      [,1] [,2] [,3]
-#&gt; [1,]    0    0    0
-#&gt; [2,]    2    0    0
-#&gt; [3,]    2   14    0
-#&gt; 
-#&gt; 
-#&gt; $copula_first_par
-#&gt; , , 1
-#&gt; 
-#&gt;          [,1]     [,2] [,3]
-#&gt; [1,] 0.000000 0.000000    0
-#&gt; [2,] 1.147302 0.000000    0
-#&gt; [3,] 9.867755 2.681221    0
-#&gt; 
-#&gt; , , 2
-#&gt; 
-#&gt;            [,1]     [,2] [,3]
-#&gt; [1,] 0.00000000 0.000000    0
-#&gt; [2,] 0.03133158 0.000000    0
-#&gt; [3,] 0.75312047 4.475816    0
-#&gt; 
-#&gt; 
-#&gt; $copula_second_par
-#&gt; , , 1
-#&gt; 
-#&gt;      [,1]      [,2] [,3]
-#&gt; [1,]    0 0.0000000    0
-#&gt; [2,]    0 0.0000000    0
-#&gt; [3,]    0 0.9305735    0
-#&gt; 
-#&gt; , , 2
-#&gt; 
-#&gt;          [,1] [,2] [,3]
-#&gt; [1,] 0.000000    0    0
-#&gt; [2,] 8.977330    0    0
-#&gt; [3,] 9.342526    0    0
-#&gt; 
-#&gt; 
-#&gt; $vine_structure
-#&gt; , , 1
-#&gt; 
-#&gt;      [,1] [,2] [,3]
-#&gt; [1,]    2    0    0
-#&gt; [2,]    3    1    0
-#&gt; [3,]    1    3    3
-#&gt; 
-#&gt; , , 2
-#&gt; 
-#&gt;      [,1] [,2] [,3]
-#&gt; [1,]    1    0    0
-#&gt; [2,]    2    2    0
-#&gt; [3,]    3    3    3
-#&gt; 
-#&gt; 
-#&gt; $mixture_probs
-#&gt; [1] 0.5656021 0.4343979
-#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>x_data</span><span class='op'>$</span><span class='va'>comp_id</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>cluster</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    
-#&gt;       1   2
-#&gt;   1  64 436
-#&gt;   2 491   9</div><div class='input'><span class='co'># evaluate the density at (X1, X2, X3) = (1,2,3) for the fitted vcmm</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span><span class='op'>(</span><span class='va'>x_data</span><span class='op'>$</span><span class='va'>comp_id</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>cluster</span><span class='op'>)</span>
+<span class='co'># evaluate the density at (X1, X2, X3) = (1,2,3) for the fitted vcmm</span>
 <span class='co'># after encoding fitted vine copula</span>
 <span class='va'>RVMs_fitted</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>RVMs_fitted</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'>VineCopula</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/VineCopula/man/RVineMatrix.html'>RVineMatrix</a></span><span class='op'>(</span>Matrix<span class='op'>=</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>vine_structure</span><span class='op'>[</span>,,<span class='fl'>1</span><span class='op'>]</span>,
@@ -344,8 +261,10 @@ arXiv: 2102.03257</p>
                         family<span class='op'>=</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>bicop_familyset</span><span class='op'>[</span>,,<span class='fl'>2</span><span class='op'>]</span>,
                         par<span class='op'>=</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>bicop_param</span><span class='op'>[</span>,,<span class='fl'>2</span><span class='op'>]</span>,
                         par2<span class='op'>=</span><span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>bicop_param2</span><span class='op'>[</span>,,<span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span>
-<span class='fu'><a href='vcmm_methods.html'>dvcmm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>margin</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>marginal_param</span>, <span class='va'>RVMs_fitted</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>mixture_prob</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.0008928622</div><div class='input'>
+<span class='fu'><a href='vcmm_methods.html'>dvcmm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span><span class='op'>)</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>margin</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>marginal_param</span>,
+<span class='va'>RVMs_fitted</span>, <span class='va'>fit</span><span class='op'>$</span><span class='va'>output</span><span class='op'>$</span><span class='va'>mixture_prob</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -358,7 +277,7 @@ arXiv: 2102.03257</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Özge Sahin.</p>
+  <p>Developed by Oezge Sahin.</p>
 </div>
 
 <div class="pkgdown">

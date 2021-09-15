@@ -3,7 +3,8 @@
 initial_clustering <- function(data, total_cluster, is_cvine, init_vinestr, init_trunclevel, init_mar,
                                init_bicop, clustering_method){
   if(is.na(is_cvine)) is_cvine <- 0
-  if(all(is.na(init_bicop))) {init_bicop <- c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,20,23,24,26,27,28,30,33,34,36,37,38,40)}
+  if(all(is.na(init_bicop))) {init_bicop <- c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,
+                                              20,23,24,26,27,28,30,33,34,36,37,38,40)}
   total_features <- dim(data)[2]
   total_obs <- dim(data)[1]
   u_data_to_cluster <- list()
@@ -54,31 +55,37 @@ initial_clustering <- function(data, total_cluster, is_cvine, init_vinestr, init
                                                                        marginal_params[,x,j], 'cdf'))
     if(clustering_method == 'gmm'){
       if(is.matrix(init_vinestr)){
-        fit_rvm <- VineCopula::RVineCopSelect(u_data[gmm_fit$classification == j,,j], familyset=init_bicop, Matrix=init_vinestr, trunclevel=init_trunclevel)
+        fit_rvm <- VineCopula::RVineCopSelect(u_data[gmm_fit$classification == j,,j], familyset=init_bicop,
+                                              Matrix=init_vinestr, trunclevel=init_trunclevel)
         vine_structures[,,j] <- init_vinestr
       }
       else{
-        fit_rvm <- VineCopula::RVineStructureSelect(u_data[gmm_fit$classification == j,,j], familyset=init_bicop, type=is_cvine, trunclevel=init_trunclevel)
+        fit_rvm <- VineCopula::RVineStructureSelect(u_data[gmm_fit$classification == j,,j], familyset=init_bicop,
+                                                    type=is_cvine, trunclevel=init_trunclevel)
         vine_structures[,,j] <- fit_rvm$Matrix
       }
     }
     if(clustering_method == 'kmeans'){
       if(is.matrix(init_vinestr)){
-        fit_rvm <- VineCopula::RVineCopSelect(u_data[kmeans_fit$cluster == j,,j], familyset=init_bicop, Matrix=init_vinestr, trunclevel=init_trunclevel)
+        fit_rvm <- VineCopula::RVineCopSelect(u_data[kmeans_fit$cluster == j,,j], familyset=init_bicop,
+                                              Matrix=init_vinestr, trunclevel=init_trunclevel)
         vine_structures[,,j] <- init_vinestr
       }
       else{
-        fit_rvm <- VineCopula::RVineStructureSelect(u_data[kmeans_fit$cluster == j,,j], familyset=init_bicop, type=is_cvine, trunclevel=init_trunclevel)
+        fit_rvm <- VineCopula::RVineStructureSelect(u_data[kmeans_fit$cluster == j,,j], familyset=init_bicop,
+                                                    type=is_cvine, trunclevel=init_trunclevel)
         vine_structures[,,j] <- fit_rvm$Matrix
       }
     }
     if(clustering_method == 'hcVVV'){
       if(is.matrix(init_vinestr)){
-        fit_rvm <- VineCopula::RVineCopSelect(u_data[hcVVV_cl == j,,j], familyset=init_bicop, Matrix=init_vinestr, trunclevel=init_trunclevel)
+        fit_rvm <- VineCopula::RVineCopSelect(u_data[hcVVV_cl == j,,j], familyset=init_bicop,
+                                              Matrix=init_vinestr, trunclevel=init_trunclevel)
         vine_structures[,,j] <- init_vinestr
       }
       else{
-        fit_rvm <- VineCopula::RVineStructureSelect(u_data[hcVVV_cl == j,,j], familyset=init_bicop, type=is_cvine, trunclevel=init_trunclevel)
+        fit_rvm <- VineCopula::RVineStructureSelect(u_data[hcVVV_cl == j,,j], familyset=init_bicop,
+                                                    type=is_cvine, trunclevel=init_trunclevel)
         vine_structures[,,j] <- fit_rvm$Matrix
       }
     }
@@ -87,7 +94,8 @@ initial_clustering <- function(data, total_cluster, is_cvine, init_vinestr, init
     cop_params_2[,,j] <- fit_rvm$par2
     mix_probs[j] <- length(data_to_cluster[[j]][,1])/total_obs
   }
-  result <- list("u_data"=u_data, "mix_probs"=mix_probs, "marginal_fams" = marginal_fams, "marginal_params"=marginal_params,
-                 "family_sets"=family_sets,"vine_structures"=vine_structures, "cop_params"=cop_params, "cop_params_2"=cop_params_2)
+  result <- list("u_data"=u_data, "mix_probs"=mix_probs, "marginal_fams" = marginal_fams,
+                 "marginal_params"=marginal_params, "family_sets"=family_sets,
+                 "vine_structures"=vine_structures, "cop_params"=cop_params, "cop_params_2"=cop_params_2)
   result
 }

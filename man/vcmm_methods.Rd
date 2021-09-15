@@ -14,11 +14,11 @@ rvcmm(dims, obs, margin, margin_pars, RVMs)
 \arguments{
 \item{x}{A vector of length d or a d-column matrix for evaluation points, where d is the number of variables (p)}
 
-\item{margin}{A matrix, containing the name of univariate marginal distributions in each component as given in \code{\link{vcmm}}.
-Rows correspond to variable, columns correspond to component.}
+\item{margin}{A matrix, containing the name of univariate marginal distributions in each component
+as given in \code{\link{vcmm}}. Rows correspond to variable, columns correspond to component.}
 
-\item{margin_pars}{An array, specifiying the univariate marginal distributions' parameters in each component. First, second, third dimensions
-specify the parameter, variable, component, respectively.}
+\item{margin_pars}{An array, specifying the univariate marginal distributions' parameters in each component.
+First, second, third dimensions specify the parameter, variable, component, respectively.}
 
 \item{RVMs}{A list, containing the R-vine copula model of each component.
 \link[VineCopula]{RVineMatrix} describes the encoding of a R-vine copula model.}

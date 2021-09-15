@@ -1,5 +1,13 @@
 
-# vineclust: Model-based clustering with vine copulas
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/oezgesahin/vineclust/workflows/R-CMD-check/badge.svg)](https://github.com/oezgesahin/vineclust/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/vineclust)](https://CRAN.R-project.org/package=vineclust)
+<!-- badges: end -->
+
+# vineclust: Model-Based Clustering with Vine Copulas
 
 An R package that fits vine copula based mixture model distributions to
 the continuous data for a given number of components as proposed in
@@ -18,8 +26,8 @@ You can install the development version from
 [GitHub](https://github.com/oezgesahin) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("oezgesahin/vineclust")
+# install.packages("remotes")
+remotes::install_github("oezgesahin/vineclust")
 ```
 
 ## Package overview
@@ -39,7 +47,7 @@ Below is an overview of some functions and features.
 ### Bivariate copula families
 
 This package works with a wide range of parametric bivariate copula
-families for bivarite or multivariate clustering using vine copulas.
+families for bivariate or multivariate clustering using vine copulas.
 Specifically, it allows fitting elliptical (Gaussian, Student-t) and
 Archimedean (Clayton, Gumbel, Frank, Joe, BB1, BB6, and BB8) copulas
 with their possible 90, 180, 270 degrees rotations to cover a large
@@ -56,7 +64,7 @@ distributions.
   - `gamma(a,b)`: gamma distribution with shape parameter a and rate
     parameter b,
   - `llogis(a,b)`: log-logistic distribution with shape parameter a and
-    scale parameter b,
+    rate parameter b,
   - `lnorm(a,b)`: log-normal distribution with mean parameter a and
     standard deviation parameter b on the logarithmic scale,
   - `logis(a,b)`: logistic distribution with location parameter a and
@@ -98,7 +106,7 @@ data_wisc <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/
 fit <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2)
  # Model statistics
 print(fit)
-#> logLik = 2156.03   BIC = -4210.55   ICL = -4174.56   npars = 16   initial clustering = kmeans   ECM iterations = 5
+#> logLik = 2159.11   BIC = -4108.88   ICL = -4068.3   npars = 33   initial clustering = kmeans   ECM iterations = 4
 # Fitted vine copula distributions
 summary(fit) 
 #> $margins
@@ -111,19 +119,19 @@ summary(fit)
 #> $marginal_pars
 #> , , 1
 #> 
-#>           [,1]       [,2]       [,3]      [,4]
-#> [1,] 1.3147399 -1.9226732 -0.7996311 0.1869493
-#> [2,] 0.5059076  0.1380584  0.3534658 0.0393310
-#> [3,]        NA         NA         NA 1.8611051
-#> [4,]        NA         NA         NA        NA
+#>           [,1]       [,2]       [,3]       [,4]
+#> [1,] 1.3257284 -1.9132582 -0.8083077 0.18916084
+#> [2,] 0.5085319  0.1325288  0.3702962 0.03873749
+#> [3,]        NA         NA         NA 1.81086926
+#> [4,]        NA         NA         NA         NA
 #> 
 #> , , 2
 #> 
-#>           [,1]      [,2]        [,3]       [,4]
-#> [1,] 0.6408718  42.03979   0.1447363 0.07210234
-#> [2,] 0.3795854 340.54956   0.1093514 0.03237977
-#> [3,]        NA        NA 306.7345684         NA
-#> [4,]        NA        NA          NA         NA
+#>           [,1]      [,2]       [,3]       [,4]
+#> [1,] 0.6513504  42.84792  0.1607200 0.07370799
+#> [2,] 0.3849773 347.42118  0.1222864 0.03358325
+#> [3,]        NA        NA 13.0380864         NA
+#> [4,]        NA        NA         NA         NA
 #> 
 #> 
 #> $copula
@@ -132,52 +140,52 @@ summary(fit)
 #>      [,1] [,2] [,3] [,4]
 #> [1,]    0    0    0    0
 #> [2,]    1    0    0    0
-#> [3,]   16    5    0    0
-#> [4,]    5    1    5    0
+#> [3,]   24    1    0    0
+#> [4,]    5    1   20    0
 #> 
 #> , , 2
 #> 
 #>      [,1] [,2] [,3] [,4]
 #> [1,]    0    0    0    0
 #> [2,]   33    0    0    0
-#> [3,]   33    2    0    0
-#> [4,]   10    3   20    0
+#> [3,]   33   23    0    0
+#> [4,]   10    3   14    0
 #> 
 #> 
 #> $copula_first_par
 #> , , 1
 #> 
-#>           [,1]       [,2]     [,3] [,4]
-#> [1,]  0.000000  0.0000000 0.000000    0
-#> [2,] -0.376350  0.0000000 0.000000    0
-#> [3,]  1.107328 -1.4521446 0.000000    0
-#> [4,]  1.990249  0.3762734 4.296215    0
+#>            [,1]       [,2]  [,3] [,4]
+#> [1,]  0.0000000  0.0000000 0.000    0
+#> [2,] -0.3781992  0.0000000 0.000    0
+#> [3,] -1.0644572 -0.2277140 0.000    0
+#> [4,]  2.1769280  0.3734696 5.682    0
 #> 
 #> , , 2
 #> 
-#>             [,1]        [,2]     [,3] [,4]
-#> [1,]  0.00000000  0.00000000 0.000000    0
-#> [2,] -0.06998957  0.00000000 0.000000    0
-#> [3,] -0.19001573 -0.06769775 0.000000    0
-#> [4,]  1.27858180  0.42239359 4.071188    0
+#>             [,1]        [,2]    [,3] [,4]
+#> [1,]  0.00000000  0.00000000 0.00000    0
+#> [2,] -0.09652639  0.00000000 0.00000    0
+#> [3,] -0.19082564 -0.07882284 0.00000    0
+#> [4,]  1.30499379  0.41096477 2.66261    0
 #> 
 #> 
 #> $copula_second_par
 #> , , 1
 #> 
-#>      [,1] [,2] [,3] [,4]
-#> [1,]    0    0    0    0
-#> [2,]    0    0    0    0
-#> [3,]    0    0    0    0
-#> [4,]    0    0    0    0
+#>      [,1] [,2]      [,3] [,4]
+#> [1,]    0    0 0.0000000    0
+#> [2,]    0    0 0.0000000    0
+#> [3,]    0    0 0.0000000    0
+#> [4,]    0    0 0.6308378    0
 #> 
 #> , , 2
 #> 
-#>           [,1]     [,2]      [,3] [,4]
-#> [1,] 0.0000000  0.00000 0.0000000    0
-#> [2,] 0.0000000  0.00000 0.0000000    0
-#> [3,] 0.0000000 20.07937 0.0000000    0
-#> [4,] 0.8923816  0.00000 0.9621593    0
+#>           [,1] [,2] [,3] [,4]
+#> [1,] 0.0000000    0    0    0
+#> [2,] 0.0000000    0    0    0
+#> [3,] 0.0000000    0    0    0
+#> [4,] 0.9357103    0    0    0
 #> 
 #> 
 #> $vine_structure
@@ -199,7 +207,7 @@ summary(fit)
 #> 
 #> 
 #> $mixture_probs
-#> [1] 0.3677205 0.6322795
+#> [1] 0.3524161 0.6475839
 # Evaluate the density of the fitted model at (2.747, 0.1467, 0.13, 0.05334)
 RVMs_fitted <- list()
 RVMs_fitted[[1]] <- VineCopula::RVineMatrix(Matrix=fit$output$vine_structure[,,1],
@@ -211,19 +219,18 @@ RVMs_fitted[[2]] <- VineCopula::RVineMatrix(Matrix=fit$output$vine_structure[,,2
                         par=fit$output$bicop_param[,,2],
                         par2=fit$output$bicop_param2[,,2])
 dvcmm(c(2.747, 0.1467, 0.13, 0.05334), fit$output$margin, fit$output$marginal_param, RVMs_fitted, fit$output$mixture_prob)
-#> [1] 21.67364
+#> [1] 26.70683
 ```
 
 ``` r
 # C-vine copula based mixture model
 fit_cvine <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, is_cvine=1)  
-#> 10 ECM iterations are complete
 # Confusion matrix w.r.t. true classification
 table(fit_cvine$cluster, data_wisc$V2) 
 #>    
 #>       B   M
-#>   1 324  18
-#>   2  33 194
+#>   1 325  20
+#>   2  32 192
 ```
 
 ``` r
@@ -232,14 +239,9 @@ fit_clayton <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, bicop=c(3))
 ```
 
 ``` r
-# Fit only univariate normal distribution for margins in both components
-fit_norm <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, mar=c("norm"))  
-```
-
-``` r
 # Fix vine tree structures of both components 
-fit_fix_vinestr <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, vinestr=matrix(c(1,2,3,4,0,2,4,3,0,0,4,3,0,0,0,3),4,4)) 
-#> 10 ECM iterations are complete
+fit_fix_vinestr <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2,
+                        vinestr=matrix(c(1,2,3,4,0,2,4,3,0,0,4,3,0,0,0,3),4,4)) 
 ```
 
 ``` r
@@ -282,10 +284,10 @@ x_data <- rvcmm(dims, obs, margin, margin_pars, RVMs)
 
 Please contact <ozge.sahin@tum.de> if you have any questions.
 
-## References - Citation
-
-Please cite our paper if you use the algorithm or code in your own work:
+## References
 
 Sahin, {"O}., & Czado, C. (2021). Vine copula mixture models and
-clustering for non-gaussian data. arXiv:2102.03257.
-[pdf](https://arxiv.org/pdf/2102.03257.pdf)
+clustering for non-gaussian data. Econometrics and Statistics.
+<doi:10.1016/j.ecosta.2021.08.011>.
+[preprint](https://arxiv.org/pdf/2102.03257.pdf),
+[article](https://doi.org/10.1016/j.ecosta.2021.08.011)

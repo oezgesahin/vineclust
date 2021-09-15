@@ -4,10 +4,10 @@
 #' @name vcmm_methods
 #' @aliases dvcmm pvcmm rvcmm
 #' @param x  A vector of length d or a d-column matrix for evaluation points, where d is the number of variables (p)
-#' @param margin A matrix, containing the name of univariate marginal distributions in each component as given in \code{\link{vcmm}}.
-#' Rows correspond to variable, columns correspond to component.
-#' @param margin_pars An array, specifiying the univariate marginal distributions' parameters in each component. First, second, third dimensions
-#' specify the parameter, variable, component, respectively.
+#' @param margin A matrix, containing the name of univariate marginal distributions in each component
+#' as given in \code{\link{vcmm}}. Rows correspond to variable, columns correspond to component.
+#' @param margin_pars An array, specifying the univariate marginal distributions' parameters in each component.
+#' First, second, third dimensions specify the parameter, variable, component, respectively.
 #' @param RVMs A list, containing the R-vine copula model of each component.
 #' \link[VineCopula]{RVineMatrix} describes the encoding of a R-vine copula model.
 #' @param mix_probs A vector of length k (number of components), containing mixture proportion of each component

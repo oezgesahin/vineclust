@@ -12,7 +12,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-# vineclust: Model-based clustering with vine copulas
+<!-- badges: start -->
+[![R build status](https://github.com/oezgesahin/vineclust/workflows/R-CMD-check/badge.svg)](https://github.com/oezgesahin/vineclust/actions)
+[![CRAN status](https://www.r-pkg.org/badges/version/vineclust)](https://CRAN.R-project.org/package=vineclust)
+<!-- badges: end -->
+
+# vineclust: Model-Based Clustering with Vine Copulas
 
 An R package that fits vine copula based mixture model distributions to the continuous data for a given number of components as proposed in [VCMM algorithm](https://arxiv.org/pdf/2102.03257.pdf) and use its results for clustering.
 
@@ -23,8 +28,8 @@ It depends on [VineCopula](https://github.com/tnagler/VineCopula), [actuar](http
 You can install the development version from [GitHub](https://github.com/oezgesahin) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("oezgesahin/vineclust")
+# install.packages("remotes")
+remotes::install_github("oezgesahin/vineclust")
 ```
 
 ## Package overview
@@ -39,7 +44,7 @@ Below is an overview of some functions and features.
 
 ### Bivariate copula families
 
-This package works with a wide range of parametric bivariate copula families for bivarite or multivariate clustering using vine copulas. Specifically, it allows fitting elliptical (Gaussian, Student-t) and Archimedean (Clayton, Gumbel, Frank, Joe, BB1, BB6, and BB8) copulas with their possible 90, 180, 270 degrees rotations to cover a large range of dependence patterns. Their encoding is detailed on [VineCopula](https://github.com/tnagler/VineCopula). 
+This package works with a wide range of parametric bivariate copula families for bivariate or multivariate clustering using vine copulas. Specifically, it allows fitting elliptical (Gaussian, Student-t) and Archimedean (Clayton, Gumbel, Frank, Joe, BB1, BB6, and BB8) copulas with their possible 90, 180, 270 degrees rotations to cover a large range of dependence patterns. Their encoding is detailed on [VineCopula](https://github.com/tnagler/VineCopula). 
 
 ### Univariate marginal distributions
 
@@ -47,7 +52,7 @@ This package currently includes following unimodal univariate marginal distribut
 
 * ```cauchy(a,b)```: Cauchy distribution with location parameter a and scale parameter b,
 * ```gamma(a,b)```: gamma distribution with shape parameter a and rate parameter b,
-* ```llogis(a,b)```: log-logistic distribution with shape parameter a and scale parameter b,
+* ```llogis(a,b)```: log-logistic distribution with shape parameter a and rate parameter b,
 * ```lnorm(a,b)```: log-normal distribution with mean parameter a and standard deviation parameter b on the logarithmic scale,
 * ```logis(a,b)```: logistic distribution with location parameter a and scale parameter b,
 * ```norm(a,b)```: normal distribution with mean parameter a and standard deviation parameter b,
@@ -65,7 +70,7 @@ This package currently implements following partition approaches to have startin
 
 ## Usage
 
-```{r example}
+```{r example1}
 library(vineclust)
 # data from UCI Machine Learning Repository 
 data_wisc <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data", header = FALSE)
@@ -73,7 +78,7 @@ data_wisc <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/
 
 ### Model fitting
 
-```{r example1}
+```{r example2}
  # R-vine copula based mixture model with total components 2
 fit <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2)
  # Model statistics
@@ -93,7 +98,7 @@ RVMs_fitted[[2]] <- VineCopula::RVineMatrix(Matrix=fit$output$vine_structure[,,2
 dvcmm(c(2.747, 0.1467, 0.13, 0.05334), fit$output$margin, fit$output$marginal_param, RVMs_fitted, fit$output$mixture_prob)
 ```
 
-```{r example2}
+```{r example3}
 # C-vine copula based mixture model
 fit_cvine <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, is_cvine=1)  
 # Confusion matrix w.r.t. true classification
@@ -106,28 +111,24 @@ fit_clayton <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, bicop=c(3))
 ```
 
 ```{r example5}
-# Fit only univariate normal distribution for margins in both components
-fit_norm <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, mar=c("norm"))  
-```
-
-```{r example7}
 # Fix vine tree structures of both components 
-fit_fix_vinestr <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, vinestr=matrix(c(1,2,3,4,0,2,4,3,0,0,4,3,0,0,0,3),4,4)) 
+fit_fix_vinestr <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2,
+                        vinestr=matrix(c(1,2,3,4,0,2,4,3,0,0,4,3,0,0,0,3),4,4)) 
 ``` 
 
-```{r example3}
+```{r example6}
 # Run ECM iterations shorter with a smaller threshold than the default threshold
 fit_sthr <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, threshold=0.001)  
 ``` 
 
-```{r example6}
+```{r example7}
 # Use a different initial partition approach from k-means
 fit_best_init <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, methods=c("gmm"))  
 ```
 
 ### Simulation
 
-```{r example11}
+```{r example8}
 # Simulation setup given in Section 5.2 of the paper at https://arxiv.org/pdf/2102.03257.pdf
 dims <- 3
 obs <- c(500,500) 
@@ -155,8 +156,6 @@ x_data <- rvcmm(dims, obs, margin, margin_pars, RVMs)
 
 Please contact ozge.sahin@tum.de if you have any questions.
 
-## References - Citation
+## References
 
-Please cite our paper if you use the algorithm or code in your own work:
-
-Sahin, {\"O}., \& Czado, C. (2021). Vine copula mixture models and clustering for non-gaussian data. arXiv:2102.03257. [pdf](https://arxiv.org/pdf/2102.03257.pdf)
+Sahin, {\"O}., \& Czado, C. (2021). Vine copula mixture models and clustering for non-gaussian data. Econometrics and Statistics. doi:10.1016/j.ecosta.2021.08.011. [preprint](https://arxiv.org/pdf/2102.03257.pdf), [article](https://doi.org/10.1016/j.ecosta.2021.08.011)

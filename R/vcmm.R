@@ -1,24 +1,31 @@
-#' Model-based clustering with vine copulas
+#' Model-Based Clustering with Vine Copulas
 #'
 #' It fits vine copula based mixture model distributions to the continuous data
-#' for a given number of components as described in Sahin and Czado (2021) and use its results for clustering.
+#' for a given number of components as described in Sahin and Czado (2021)
+#' and use its results for clustering.
 #'
 #' @param data 	A matrix or data frame of observations. Categorical/discrete variables not (yet) allowed.
 #' If a matrix or data frame, rows correspond to observations (i) and columns correspond to variables (p).
 #' @param total_comp An integer specifying the numbers of mixture components (clusters)
-#' @param is_cvine An integer specifying if the type of components' vine tree structure is C-vine before/after the ECM phase of clustering.
+#' @param is_cvine An integer specifying if the type of components' vine tree structure is C-vine
+#' before/after the ECM phase of clustering.
 #' * 0 = R-vine (default)
 #' * 1 = C-vine
-#' @param vinestr A matrix specifying vine tree structures before/after the ECM phase of clustering. The default is automatic selection.
+#' @param vinestr A matrix specifying vine tree structures before/after the ECM phase of clustering.
+#' The default is automatic selection.
 #' \link[VineCopula]{RVineMatrixCheck} checks for a valid R-vine matrix.
 #' @param trunclevel An integer showing the level of truncation for vine tree structures before the ECM phase of clustering.
 #' The default is 1.
-#' @param mar A vector of character strings indicating the parametric univariate marginal distributions to be fitted before/after the ECM phase of clustering.
-#' The default is c('cauchy','gamma','llogis','lnorm','logis','norm','snorm','std', 'sstd'). Other distributions not (yet) allowed.
-#' @param bicop A vector of integers denoting the parametric bivariate copula families to be fitted before/after the ECM phase of clustering.
+#' @param mar A vector of character strings indicating the parametric univariate marginal distributions
+#' to be fitted before/after the ECM phase of clustering.
+#' The default is c('cauchy','gamma','llogis','lnorm','logis','norm','snorm','std', 'sstd').
+#' Other distributions not (yet) allowed.
+#' @param bicop A vector of integers denoting the parametric bivariate copula families to be fitted
+#' before/after the ECM phase of clustering.
 #' The default is c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,20,23,24,26,27,28,30,33,34,36,37,38,40).
 #' \link[VineCopula]{BiCop} describes the available families with their specifications.
-#' @param methods A vector of character strings indicating initial clustering method(s) to have a partition for model selection before the ECM phase of clustering. Current options:
+#' @param methods A vector of character strings indicating initial clustering method(s) to have a partition
+#' for model selection before the ECM phase of clustering. Current options:
 #' * 'kmeans' (default)
 #' * c('kmeans', 'gmm', 'hcVVV')
 #' @param threshold A numeric, stopping the ECM phase of clustering. The default is 1e-4.
@@ -28,13 +35,14 @@
 #' \describe{
 #' \item{cluster}{the vector with the classification of observations}
 #' \item{output}{a list containing the fitted VCMM.}
-#' } Use `print.vcmm_res()` to obtain log-likelihood, BIC, ICL, number of estimated parameters, initial clustering method used and total
-#' number of ECM iterations for the fitted VCMM. `summary.vcmm_res()` shows the fitted vine tree structrues and univariate marginal distributions,
-#' bivariate copula families with the estimated parameters, as well as mixture proportions of each component.
+#' } Use `print.vcmm_res()` to obtain log-likelihood, BIC, ICL, number of estimated parameters, initial clustering method used
+#'  and total number of ECM iterations for the fitted VCMM. `summary.vcmm_res()` shows the fitted vine tree structures and
+#'  univariate marginal distributions, bivariate copula families with the estimated parameters, as well as
+#'  mixture proportions of each component.
 #'
 #' @references
-#' Sahin and Czado (2021), Vine copula mixture models and clustering for non-Gaussian data,
-#' arXiv: 2102.03257
+#' Sahin and Czado (2021), Vine copula mixture models and clustering for non-Gaussian data, Econometrics and Statistics.
+#' doi: 10.1016/j.ecosta.2021.08.011
 #'
 #' @seealso [dvcmm()], [rvcmm()]
 #'
@@ -65,6 +73,7 @@
 #' # Example-1: fit parametric 3 dimensional R-vine copula based mixture model with 2 components,
 #' # using all univariate marginal distributions and bivariate copula families allowed,
 #' # initial partition of k-means
+#' \dontrun{
 #' fit <- vcmm(x_data[,1:3], total_comp = 2)
 #' print(fit)
 #' summary(fit)
@@ -80,13 +89,16 @@
 #'                         family=fit$output$bicop_familyset[,,2],
 #'                         par=fit$output$bicop_param[,,2],
 #'                         par2=fit$output$bicop_param2[,,2])
-#' dvcmm(c(1, 2, 3), fit$output$margin, fit$output$marginal_param, RVMs_fitted, fit$output$mixture_prob)
+#' dvcmm(c(1, 2, 3), fit$output$margin, fit$output$marginal_param,
+#' RVMs_fitted, fit$output$mixture_prob)
+#' }
 #'
 #' @export
 #'
 #' @import VineCopula
 #' @import mclust
 #' @import univariateML
+#' @importFrom parallel mclapply
 #' @importFrom fGarch psnorm dsnorm pstd dstd psstd dsstd
 #' @importFrom actuar dllogis pllogis
 #' @importFrom stats dgamma dlnorm dlogis dnorm dcauchy kmeans optim pgamma plnorm plogis pnorm pcauchy sd
@@ -145,71 +157,21 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
           break
         }
       }
-      if(((iteration-1) - floor((iteration-1)/10)*10)==0 & (iteration-1) > 0) cat(iteration-1, "ECM iterations are complete", "\n")
+      #if(((iteration-1) - floor((iteration-1)/10)*10)==0 & (iteration-1) > 0) cat(iteration-1, "ECM iterations are complete", "\n")
       #E-step
       z_values <- lik_points/rep(lik_per_obs, total_comp)
+      #CM-steps:
       #CM-step 1
       mix_probs <- CM_step_mixture_probs(z_values)
+      #CM-step 2 and 3
+      CMS <- parallel::mclapply(1:total_comp, function(x) CM_steps(data, vine_structures[,,x], family_sets[,,x], cop_params[,,x],
+                                                         cop_params_2[,,x], z_values[,x], marginal_fams[,x], marginal_params[,,x],
+                                                         maxit))
       for(j in 1:total_comp){
-        vine_structure <- vine_structures[,,j]
-        family_set <- family_sets[,,j]
-        cop_param <- cop_params[,,j]
-        cop_param_2 <- cop_params_2[,,j]
-        z_value <- z_values[,j]
-        marginal_fam <- marginal_fams[,j]
-        marginal_par <- marginal_params[,,j]
-        #CM-step 2
-        for(p in 1:total_features){
-          if(marginal_fam[p]=='Normal' || marginal_fam[p]=='Lognormal' || marginal_fam[p]=='Logistic'){
-            marginal_par[2,p] <- log(marginal_par[2,p])
-          }
-          else if(marginal_fam[p]=='Skew Normal'  || marginal_fam[p]=='Student-t'){
-            marginal_par[2,p] <- log(marginal_par[2,p])
-            marginal_par[3,p] <- log(marginal_par[3,p])
-          }
-          else if(marginal_fam[p]=='Skew Student-t'){
-            marginal_par[2,p]  <- log(marginal_par[2,p])
-            marginal_par[3,p]  <- log(marginal_par[3,p])
-            marginal_par[4,p]  <- log(marginal_par[4,p])
-          }
-          else{
-            marginal_par[1,p] <- log(marginal_par[1,p])
-            marginal_par[2,p] <- log(marginal_par[2,p])
-          }
-          pars <- marginal_par[,p]
-          opt_margins <- optim(par=pars, CM_step_margin_params, data=data, marginal_par=marginal_par, p=p,
-                               marginal_families=marginal_fam, z_values=z_value, vine_structures=vine_structure,
-                               family_sets=family_set, cop_params=cop_param, cop_params_2=cop_param_2, method = "BFGS",
-                               control = list(maxit=maxit))
-          optimized_par <- opt_margins$par
-          if(marginal_fam[p]=='Normal' || marginal_fam[p]=='Lognormal' || marginal_fam[p]=='Logistic'){
-            marginal_params[2,p,j]  <- exp(optimized_par[2])
-            marginal_params[1,p,j]  <- optimized_par[1]
-          }
-          else if(marginal_fam[p]=='Skew Normal'  || marginal_fam[p]=='Student-t'){
-            marginal_params[1,p,j]  <- optimized_par[1]
-            marginal_params[2,p,j]  <- exp(optimized_par[2])
-            marginal_params[3,p,j]  <- exp(optimized_par[3])
-          }
-          else if(marginal_fam[p]=='Skew Student-t'){
-            marginal_params[1,p,j]  <- optimized_par[1]
-            marginal_params[2,p,j]  <- exp(optimized_par[2])
-            marginal_params[3,p,j]  <- exp(optimized_par[3])
-            marginal_params[4,p,j]  <- exp(optimized_par[4])
-          }
-          else{
-            marginal_params[2,p,j]  <- exp(optimized_par[2])
-            marginal_params[1,p,j]  <- exp(optimized_par[1])
-          }
-          marginal_par[,p] <- marginal_params[,p,j]
-        }
-        #CM-step 3
-        u_data[,,j] <- sapply(1:total_features, function(x) pdf_cdf_quant_margin(data[,x],marginal_fams[x,j],
-                                                                                 marginal_params[,x,j], 'cdf'))
-        RVM <- VineCopula::RVineMatrix(Matrix=vine_structure,family=family_set, par=cop_param, par2=cop_param_2)
-        seq_RVM <- VineCopula::RVineSeqEst(u_data[,,j], RVM, weights=z_value,  progress=FALSE)
-        cop_params[,,j] <- seq_RVM$par
-        cop_params_2[,,j] <- seq_RVM$par2
+        marginal_params[,,j] <- CMS[[j]]$marginal_par
+        cop_params[,,j] <-  CMS[[j]]$cop_param
+        cop_params_2[,,j] <- CMS[[j]]$cop_param_2
+        u_data[,,j] <- CMS[[j]]$u_data
       }
       iteration <- iteration + 1
     }
