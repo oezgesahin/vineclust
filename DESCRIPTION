@@ -1,0 +1,27 @@
+Package: vineclust
+Title: Model-based clustering with vine copulas
+Version: 0.0.1
+Authors@R: 
+    person(given = "Özge",
+           family = "Sahin",
+           role = c("aut", "cre"),
+           email = "ozge.sahin@tum.de")
+Description: Provides functionality to fit vine copula based mixture model distributions to the continuous data, see Sahin \& Czado. (2021) <arXiv: 2102.03257>.
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/oezgesahin/vineclust
+BugReports: https://github.com/oezgesahin/vineclust/issues
+Depends:
+  R (>= 3.1.0)
+Imports: 
+  VineCopula (>= 2.4.2),
+  actuar,
+  fGarch,
+  univariateML,
+  mclust
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+License: GPL (>= 3)
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
