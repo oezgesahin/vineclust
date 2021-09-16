@@ -3,3 +3,6 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^\.github$
+^docs$
+^\.github/workflows/R-CMD-check\.yaml$
+^codecov\.yml$
