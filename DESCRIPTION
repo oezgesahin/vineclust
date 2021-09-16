@@ -19,7 +19,6 @@ Depends:
   R (>= 3.1.0)
 Imports: 
   VineCopula (>= 2.4.2),
-  actuar,
   fGarch,
   univariateML,
   parallel,

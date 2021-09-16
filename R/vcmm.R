@@ -100,7 +100,6 @@
 #' @import univariateML
 #' @importFrom parallel mclapply
 #' @importFrom fGarch psnorm dsnorm pstd dstd psstd dsstd
-#' @importFrom actuar dllogis pllogis
 #' @importFrom stats dgamma dlnorm dlogis dnorm dcauchy kmeans optim pgamma plnorm plogis pnorm pcauchy sd
 
 vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA, bicop=NA,

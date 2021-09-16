@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 An R package that fits vine copula based mixture model distributions to the continuous data for a given number of components as proposed in [VCMM algorithm](https://arxiv.org/pdf/2102.03257.pdf) and use its results for clustering.
 
-It depends on [VineCopula](https://github.com/tnagler/VineCopula), [actuar](https://github.com/cran/actuar), [fGarch](https://github.com/cran/fGarch), [mclust](https://github.com/cran/mclust), and [univariateML](https://github.com/JonasMoss/univariateML).
+It depends on [VineCopula](https://github.com/tnagler/VineCopula), [fGarch](https://github.com/cran/fGarch), [mclust](https://github.com/cran/mclust), and [univariateML](https://github.com/JonasMoss/univariateML).
 
 ## Installation
 

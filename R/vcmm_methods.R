@@ -40,7 +40,6 @@
 #'
 #' @importFrom stats qgamma qlnorm qlogis qnorm qcauchy
 #' @importFrom fGarch qstd qsnorm qsstd
-#' @importFrom actuar qllogis
 #' @rdname vcmm_methods
 #' @export
 

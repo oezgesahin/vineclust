@@ -30,13 +30,13 @@ pdf_cdf_quant_margin <- function(data, dist_name, params, value_name){
     values <- qlogis(data, location=params[1], scale=params[2])
   }
   if(dist_name == 'Loglogistic'&& value_name == 'cdf'){
-    values <- actuar::pllogis(data, shape=params[1], rate=params[2])
+    values <- 1 - 1/(1+(data*params[2])^params[1])
   }
   if(dist_name == 'Loglogistic'&& value_name == 'pdf'){
-    values <- actuar::dllogis(data, shape=params[1], rate=params[2])
+    values <- (params[1]*params[2]*(data*params[2])^(params[1]-1))/(1+(data*params[2])^params[1])^2
   }
   if(dist_name == 'Loglogistic'&& value_name == 'quant'){
-    values <- actuar::qllogis(data, shape=params[1], rate=params[2])
+    values <- 1/params[2]*(data/(1-data))^(1/params[1])
   }
   if(dist_name == 'Lognormal'&& value_name == 'cdf'){
     values <- plnorm(data, meanlog=params[1], sdlog=params[2])
