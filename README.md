@@ -15,7 +15,6 @@ the continuous data for a given number of components as proposed in
 results for clustering.
 
 It depends on [VineCopula](https://github.com/tnagler/VineCopula),
-[actuar](https://github.com/cran/actuar),
 [fGarch](https://github.com/cran/fGarch),
 [mclust](https://github.com/cran/mclust), and
 [univariateML](https://github.com/JonasMoss/univariateML).

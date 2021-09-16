@@ -69,11 +69,13 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
+
 <div id="vineclust-model-based-clustering-with-vine-copulas" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#vineclust-model-based-clustering-with-vine-copulas" class="anchor"></a>vineclust: Model-Based Clustering with Vine Copulas</h1></div>
 <p>An R package that fits vine copula based mixture model distributions to the continuous data for a given number of components as proposed in <a href="https://arxiv.org/pdf/2102.03257.pdf">VCMM algorithm</a> and use its results for clustering.</p>
-<p>It depends on <a href="https://github.com/tnagler/VineCopula">VineCopula</a>, <a href="https://github.com/cran/actuar">actuar</a>, <a href="https://github.com/cran/fGarch">fGarch</a>, <a href="https://github.com/cran/mclust">mclust</a>, and <a href="https://github.com/JonasMoss/univariateML">univariateML</a>.</p>
+<p>It depends on <a href="https://github.com/tnagler/VineCopula">VineCopula</a>, <a href="https://github.com/cran/fGarch">fGarch</a>, <a href="https://github.com/cran/mclust">mclust</a>, and <a href="https://github.com/JonasMoss/univariateML">univariateML</a>.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -164,20 +166,12 @@
 <span class="co">#&gt; $margins</span>
 <span class="co">#&gt;      [,1]          [,2]         </span>
 <span class="co">#&gt; [1,] "Lognormal"   "Lognormal"  </span>
-<span class="co">#&gt; [2,] "Gamma"       "Lognormal"  </span>
-<span class="co">#&gt; [3,] "Skew Normal" "Lognormal"  </span>
-<span class="co">#&gt; [4,] "Normal"      "Skew Normal"</span>
+<span class="co">#&gt; [2,] "Lognormal"   "Gamma"      </span>
+<span class="co">#&gt; [3,] "Lognormal"   "Skew Normal"</span>
+<span class="co">#&gt; [4,] "Skew Normal" "Normal"     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $marginal_pars</span>
 <span class="co">#&gt; , , 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;           [,1]      [,2]       [,3]       [,4]</span>
-<span class="co">#&gt; [1,] 0.6513504  42.84792  0.1607200 0.07370799</span>
-<span class="co">#&gt; [2,] 0.3849773 347.42118  0.1222864 0.03358325</span>
-<span class="co">#&gt; [3,]        NA        NA 13.0380864         NA</span>
-<span class="co">#&gt; [4,]        NA        NA         NA         NA</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; , , 2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;           [,1]       [,2]       [,3]       [,4]</span>
 <span class="co">#&gt; [1,] 1.3257284 -1.9132582 -0.8083077 0.18916084</span>
@@ -185,17 +179,17 @@
 <span class="co">#&gt; [3,]        NA         NA         NA 1.81086926</span>
 <span class="co">#&gt; [4,]        NA         NA         NA         NA</span>
 <span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;           [,1]      [,2]       [,3]       [,4]</span>
+<span class="co">#&gt; [1,] 0.6513504  42.84792  0.1607200 0.07370799</span>
+<span class="co">#&gt; [2,] 0.3849773 347.42118  0.1222864 0.03358325</span>
+<span class="co">#&gt; [3,]        NA        NA 13.0380864         NA</span>
+<span class="co">#&gt; [4,]        NA        NA         NA         NA</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $copula</span>
 <span class="co">#&gt; , , 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
-<span class="co">#&gt; [1,]    0    0    0    0</span>
-<span class="co">#&gt; [2,]   33    0    0    0</span>
-<span class="co">#&gt; [3,]   33   23    0    0</span>
-<span class="co">#&gt; [4,]   10    3   14    0</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; , , 2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
 <span class="co">#&gt; [1,]    0    0    0    0</span>
@@ -203,17 +197,17 @@
 <span class="co">#&gt; [3,]   24    1    0    0</span>
 <span class="co">#&gt; [4,]    5    1   20    0</span>
 <span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
+<span class="co">#&gt; [1,]    0    0    0    0</span>
+<span class="co">#&gt; [2,]   33    0    0    0</span>
+<span class="co">#&gt; [3,]   33   23    0    0</span>
+<span class="co">#&gt; [4,]   10    3   14    0</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $copula_first_par</span>
 <span class="co">#&gt; , , 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;             [,1]        [,2]    [,3] [,4]</span>
-<span class="co">#&gt; [1,]  0.00000000  0.00000000 0.00000    0</span>
-<span class="co">#&gt; [2,] -0.09652639  0.00000000 0.00000    0</span>
-<span class="co">#&gt; [3,] -0.19082564 -0.07882284 0.00000    0</span>
-<span class="co">#&gt; [4,]  1.30499379  0.41096477 2.66261    0</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; , , 2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;            [,1]       [,2]  [,3] [,4]</span>
 <span class="co">#&gt; [1,]  0.0000000  0.0000000 0.000    0</span>
@@ -221,17 +215,17 @@
 <span class="co">#&gt; [3,] -1.0644572 -0.2277140 0.000    0</span>
 <span class="co">#&gt; [4,]  2.1769280  0.3734696 5.682    0</span>
 <span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;             [,1]        [,2]    [,3] [,4]</span>
+<span class="co">#&gt; [1,]  0.00000000  0.00000000 0.00000    0</span>
+<span class="co">#&gt; [2,] -0.09652639  0.00000000 0.00000    0</span>
+<span class="co">#&gt; [3,] -0.19082564 -0.07882284 0.00000    0</span>
+<span class="co">#&gt; [4,]  1.30499379  0.41096477 2.66261    0</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $copula_second_par</span>
 <span class="co">#&gt; , , 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;           [,1] [,2] [,3] [,4]</span>
-<span class="co">#&gt; [1,] 0.0000000    0    0    0</span>
-<span class="co">#&gt; [2,] 0.0000000    0    0    0</span>
-<span class="co">#&gt; [3,] 0.0000000    0    0    0</span>
-<span class="co">#&gt; [4,] 0.9357103    0    0    0</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; , , 2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;      [,1] [,2]      [,3] [,4]</span>
 <span class="co">#&gt; [1,]    0    0 0.0000000    0</span>
@@ -239,17 +233,17 @@
 <span class="co">#&gt; [3,]    0    0 0.0000000    0</span>
 <span class="co">#&gt; [4,]    0    0 0.6308378    0</span>
 <span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;           [,1] [,2] [,3] [,4]</span>
+<span class="co">#&gt; [1,] 0.0000000    0    0    0</span>
+<span class="co">#&gt; [2,] 0.0000000    0    0    0</span>
+<span class="co">#&gt; [3,] 0.0000000    0    0    0</span>
+<span class="co">#&gt; [4,] 0.9357103    0    0    0</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $vine_structure</span>
 <span class="co">#&gt; , , 1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
-<span class="co">#&gt; [1,]    1    0    0    0</span>
-<span class="co">#&gt; [2,]    3    2    0    0</span>
-<span class="co">#&gt; [3,]    2    3    3    0</span>
-<span class="co">#&gt; [4,]    4    4    4    4</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; , , 2</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
 <span class="co">#&gt; [1,]    2    0    0    0</span>
@@ -257,9 +251,17 @@
 <span class="co">#&gt; [3,]    4    3    3    0</span>
 <span class="co">#&gt; [4,]    3    4    4    4</span>
 <span class="co">#&gt; </span>
+<span class="co">#&gt; , , 2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      [,1] [,2] [,3] [,4]</span>
+<span class="co">#&gt; [1,]    1    0    0    0</span>
+<span class="co">#&gt; [2,]    3    2    0    0</span>
+<span class="co">#&gt; [3,]    2    3    3    0</span>
+<span class="co">#&gt; [4,]    4    4    4    4</span>
+<span class="co">#&gt; </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $mixture_probs</span>
-<span class="co">#&gt; [1] 0.6475839 0.3524161</span>
+<span class="co">#&gt; [1] 0.3524161 0.6475839</span>
 <span class="co"># Evaluate the density of the fitted model at (2.747, 0.1467, 0.13, 0.05334)</span>
 <span class="va">RVMs_fitted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">RVMs_fitted</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">VineCopula</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/VineCopula/man/RVineMatrix.html">RVineMatrix</a></span><span class="op">(</span>Matrix<span class="op">=</span><span class="va">fit</span><span class="op">$</span><span class="va">output</span><span class="op">$</span><span class="va">vine_structure</span><span class="op">[</span>,,<span class="fl">1</span><span class="op">]</span>,
@@ -333,6 +335,7 @@
 <p>Sahin, {"O}., &amp; Czado, C. (2021). Vine copula mixture models and clustering for non-gaussian data. Econometrics and Statistics. <a href="doi:10.1016/j.ecosta.2021.08.011" class="uri">doi:10.1016/j.ecosta.2021.08.011</a>. <a href="https://arxiv.org/pdf/2102.03257.pdf">preprint</a>, <a href="https://doi.org/10.1016/j.ecosta.2021.08.011">article</a></p>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -360,7 +363,15 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=vineclust"><img src="https://www.r-pkg.org/badges/version/vineclust" alt="CRAN status"></a></li>
+<li><a href="https://github.com/oezgesahin/vineclust/actions"><img src="https://github.com/oezgesahin/vineclust/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/gh/oezgesahin/vineclust"><img src="https://codecov.io/gh/oezgesahin/vineclust/branch/main/graph/badge.svg?token=EUTCCS3B5U" alt="codecov"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
