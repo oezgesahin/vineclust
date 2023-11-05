@@ -30,6 +30,7 @@
 #' * c('kmeans', 'gmm', 'hcVVV')
 #' @param threshold A numeric, stopping the ECM phase of clustering. The default is 1e-4.
 #' @param maxit An integer, specifying the maximum number of iterations in the CM-step 2 optimization. The default is 10.
+#' @param cores An integer, showing the number of cores to use for parallel computing.
 #'
 #' @return An object of class vcmm result. It contains the elements
 #' \describe{
@@ -103,10 +104,10 @@
 #' @importFrom stats dgamma dlnorm dlogis dnorm dcauchy kmeans optim pgamma plnorm plogis pnorm pcauchy sd
 
 vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA, bicop=NA,
-                 methods=c('kmeans'),  threshold=0.0001, maxit=10){
+                 methods=c('kmeans'),  threshold=0.0001, maxit=10, cores=1){
   initial_df_check(data)
   initial_args_check(data, total_comp, is_cvine, vinestr, trunclevel, mar, bicop,
-                     methods, threshold, maxit)
+                     methods, threshold, maxit, cores)
   final_cvine <- is_cvine
   final_vinestr <- vinestr
   final_trunclevel <- NA
@@ -165,7 +166,7 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
       #CM-step 2 and 3
       CMS <- parallel::mclapply(1:total_comp, function(x) CM_steps(data, vine_structures[,,x], family_sets[,,x], cop_params[,,x],
                                                          cop_params_2[,,x], z_values[,x], marginal_fams[,x], marginal_params[,,x],
-                                                         maxit))
+                                                         maxit), mc.cores = cores)
       for(j in 1:total_comp){
         marginal_params[,,j] <- CMS[[j]]$marginal_par
         cop_params[,,j] <-  CMS[[j]]$cop_param

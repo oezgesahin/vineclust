@@ -34,7 +34,7 @@ initial_df_check <- function(data){
 #' internal function
 #' @noRd
 initial_args_check <- function(data, total_comp, is_cvine, init_vinestr, init_trunclevel, init_mar, init_bicop,
-                               methods, threshold, maxit){
+                               methods, threshold, maxit, cores){
   ncol_df <- dim(data)[2]
   if(is.null(total_comp))
     stop("number of components to be fitted must be specified")
@@ -75,6 +75,12 @@ initial_args_check <- function(data, total_comp, is_cvine, init_vinestr, init_tr
 
   if(maxit < 1)
     stop("maxit must be larger than or equal to 1")
+
+  if(cores < 1)
+    stop("cores must be larger than or equal to 1")
+
+  if(!is.numeric(cores))
+    stop("cores must be a number")
 }
 
 #' internal function
