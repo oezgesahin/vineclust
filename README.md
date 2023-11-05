@@ -33,15 +33,15 @@ remotes::install_github("oezgesahin/vineclust")
 
 Below is an overview of some functions and features.
 
-  - `vcmm()`: fits vine copula based mixture model distributions to the
-    continuous data for a given number of components. Returns an object
-    of class `vcmm_res()`. The class has the following methods:
-      - `print`: a brief overview of the model statistics.
-      - `summary`: list of fitted model components, including selected
-        vine tree structures, bivariate copula families, univariate
-        marginal distributions, and estimated parameters.
-  - `dvcmm(), rvcmm()`: density and random generation for the vine
-    copula based mixture model distributions.
+- `vcmm()`: fits vine copula based mixture model distributions to the
+  continuous data for a given number of components. Returns an object of
+  class `vcmm_res()`. The class has the following methods:
+  - `print`: a brief overview of the model statistics.
+  - `summary`: list of fitted model components, including selected vine
+    tree structures, bivariate copula families, univariate marginal
+    distributions, and estimated parameters.
+- `dvcmm(), rvcmm()`: density and random generation for the vine copula
+  based mixture model distributions.
 
 ### Bivariate copula families
 
@@ -58,37 +58,36 @@ range of dependence patterns. Their encoding is detailed on
 This package currently includes following unimodal univariate marginal
 distributions.
 
-  - `cauchy(a,b)`: Cauchy distribution with location parameter a and
-    scale parameter b,
-  - `gamma(a,b)`: gamma distribution with shape parameter a and rate
-    parameter b,
-  - `llogis(a,b)`: log-logistic distribution with shape parameter a and
-    rate parameter b,
-  - `lnorm(a,b)`: log-normal distribution with mean parameter a and
-    standard deviation parameter b on the logarithmic scale,
-  - `logis(a,b)`: logistic distribution with location parameter a and
-    scale parameter b,
-  - `norm(a,b)`: normal distribution with mean parameter a and standard
-    deviation parameter b,
-  - `snorm(a,b,c)`: skew normal distribution with location parameter a,
-    scale parameter b, and skewness parameter c.
-  - `std(a,b,c)`: Student’s t distribution with location parameter a,
-    scale parameter b, and shape parameter c,
-  - `sstd(a,b,c,d)`: skew Student’s t distribution with location
-    parameter a, scale parameter b, shape parameter c, and skewness
-    parameter d.
+- `cauchy(a,b)`: Cauchy distribution with location parameter a and scale
+  parameter b,
+- `gamma(a,b)`: gamma distribution with shape parameter a and rate
+  parameter b,
+- `llogis(a,b)`: log-logistic distribution with shape parameter a and
+  rate parameter b,
+- `lnorm(a,b)`: log-normal distribution with mean parameter a and
+  standard deviation parameter b on the logarithmic scale,
+- `logis(a,b)`: logistic distribution with location parameter a and
+  scale parameter b,
+- `norm(a,b)`: normal distribution with mean parameter a and standard
+  deviation parameter b,
+- `snorm(a,b,c)`: skew normal distribution with location parameter a,
+  scale parameter b, and skewness parameter c.
+- `std(a,b,c)`: Student’s t distribution with location parameter a,
+  scale parameter b, and shape parameter c,
+- `sstd(a,b,c,d)`: skew Student’s t distribution with location parameter
+  a, scale parameter b, shape parameter c, and skewness parameter d.
 
 ### Initial partition methods
 
 This package currently implements following partition approaches to have
 starting values.
 
-  - `kmeans`: performs k-means clustering (Hartigan-Wong) on given data
-    after scaling,
-  - `hcVVV`: performs model-based hierarchical clustering on given data
-    after scaling,
-  - `gmm`: performs model-based clustering with Gaussian mixture models
-    on given data.
+- `kmeans`: performs k-means clustering (Hartigan-Wong) on given data
+  after scaling,
+- `hcVVV`: performs model-based hierarchical clustering on given data
+  after scaling,
+- `gmm`: performs model-based clustering with Gaussian mixture models on
+  given data.
 
 ## Usage
 
@@ -129,7 +128,7 @@ summary(fit)
 #>           [,1]      [,2]       [,3]       [,4]
 #> [1,] 0.6513504  42.84792  0.1607200 0.07370799
 #> [2,] 0.3849773 347.42118  0.1222864 0.03358325
-#> [3,]        NA        NA 13.0380864         NA
+#> [3,]        NA        NA 13.0380866         NA
 #> [4,]        NA        NA         NA         NA
 #> 
 #> 
@@ -157,7 +156,7 @@ summary(fit)
 #>            [,1]       [,2]  [,3] [,4]
 #> [1,]  0.0000000  0.0000000 0.000    0
 #> [2,] -0.3781992  0.0000000 0.000    0
-#> [3,] -1.0644572 -0.2277140 0.000    0
+#> [3,] -1.0644572 -0.2277139 0.000    0
 #> [4,]  2.1769280  0.3734696 5.682    0
 #> 
 #> , , 2
@@ -176,7 +175,7 @@ summary(fit)
 #> [1,]    0    0 0.0000000    0
 #> [2,]    0    0 0.0000000    0
 #> [3,]    0    0 0.0000000    0
-#> [4,]    0    0 0.6308378    0
+#> [4,]    0    0 0.6308382    0
 #> 
 #> , , 2
 #> 
@@ -228,8 +227,8 @@ fit_cvine <- vcmm(data=data_wisc[,c(15,27,29,30)], total_comp=2, is_cvine=1)
 table(fit_cvine$cluster, data_wisc$V2) 
 #>    
 #>       B   M
-#>   1  32 192
-#>   2 325  20
+#>   1 325  21
+#>   2  32 191
 ```
 
 ``` r
@@ -281,12 +280,12 @@ x_data <- rvcmm(dims, obs, margin, margin_pars, RVMs)
 
 ## Contact
 
-Please contact <ozge.sahin@tum.de> if you have any questions.
+Please contact <O.Sahin@tudelft.nl> if you have any questions.
 
 ## References
 
-Sahin, {"O}., & Czado, C. (2021). Vine copula mixture models and
-clustering for non-gaussian data. Econometrics and Statistics.
+Sahin, {"O}., & Czado, C. (2022). Vine copula mixture models and
+clustering for non-Gaussian data. Econometrics and Statistics.
 <doi:10.1016/j.ecosta.2021.08.011>.
 [preprint](https://arxiv.org/pdf/2102.03257.pdf),
 [article](https://doi.org/10.1016/j.ecosta.2021.08.011)

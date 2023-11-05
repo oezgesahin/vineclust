@@ -155,8 +155,8 @@ x_data <- rvcmm(dims, obs, margin, margin_pars, RVMs)
 
 ## Contact
 
-Please contact ozge.sahin@tum.de if you have any questions.
+Please contact O.Sahin@tudelft.nl if you have any questions.
 
 ## References
 
-Sahin, {\"O}., \& Czado, C. (2021). Vine copula mixture models and clustering for non-gaussian data. Econometrics and Statistics. doi:10.1016/j.ecosta.2021.08.011. [preprint](https://arxiv.org/pdf/2102.03257.pdf), [article](https://doi.org/10.1016/j.ecosta.2021.08.011)
+Sahin, {\"O}., \& Czado, C. (2022). Vine copula mixture models and clustering for non-Gaussian data. Econometrics and Statistics. doi:10.1016/j.ecosta.2021.08.011. [preprint](https://arxiv.org/pdf/2102.03257.pdf), [article](https://doi.org/10.1016/j.ecosta.2021.08.011)

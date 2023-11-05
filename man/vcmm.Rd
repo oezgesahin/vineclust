@@ -14,7 +14,8 @@ vcmm(
   bicop = NA,
   methods = c("kmeans"),
   threshold = 1e-04,
-  maxit = 10
+  maxit = 10,
+  cores = 1
 )
 }
 \arguments{
@@ -57,6 +58,8 @@ for model selection before the ECM phase of clustering. Current options:
 \item{threshold}{A numeric, stopping the ECM phase of clustering. The default is 1e-4.}
 
 \item{maxit}{An integer, specifying the maximum number of iterations in the CM-step 2 optimization. The default is 10.}
+
+\item{cores}{An integer, showing the number of cores to use for parallel computing.}
 }
 \value{
 An object of class vcmm result. It contains the elements
