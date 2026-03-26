@@ -99,7 +99,6 @@
 #' @import VineCopula
 #' @import mclust
 #' @import univariateML
-#' @importFrom parallel mclapply
 #' @importFrom fGarch psnorm dsnorm pstd dstd psstd dsstd
 #' @importFrom stats dgamma dlnorm dlogis dnorm dcauchy kmeans optim pgamma plnorm plogis pnorm pcauchy sd
 
@@ -114,6 +113,17 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
   final_mar <- mar
   final_bicop <- bicop
   winner_bic <- 1000000
+  use_future <- cores > 1 && total_comp > 1
+  if(use_future){
+    old_plan <- future::plan()
+    on.exit(future::plan(old_plan), add = TRUE)
+    if(.Platform$OS.type == "windows"){
+      future::plan(future::multisession, workers = min(cores, total_comp))
+    }
+    else{
+      future::plan(future::multicore, workers = min(cores, total_comp))
+    }
+  }
   for(method in methods){
     initial_out <- initial_clustering(data, total_comp, is_cvine, vinestr, trunclevel, mar, bicop, method)
     marginal_params <- initial_out$marginal_params
@@ -164,9 +174,30 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
       #CM-step 1
       mix_probs <- CM_step_mixture_probs(z_values)
       #CM-step 2 and 3
-      CMS <- parallel::mclapply(1:total_comp, function(x) CM_steps(data, vine_structures[,,x], family_sets[,,x], cop_params[,,x],
-                                                         cop_params_2[,,x], z_values[,x], marginal_fams[,x], marginal_params[,,x],
-                                                         maxit), mc.cores = cores)
+      if(use_future){
+        CMS <- future.apply::future_lapply(1:total_comp, function(x) try(
+          CM_steps(data, vine_structures[,,x], family_sets[,,x], cop_params[,,x],
+                   cop_params_2[,,x], z_values[,x], marginal_fams[,x], marginal_params[,,x],
+                   maxit),
+          silent = TRUE
+        ), future.scheduling = 1)
+      }
+      else{
+        CMS <- lapply(1:total_comp, function(x) try(
+          CM_steps(data, vine_structures[,,x], family_sets[,,x], cop_params[,,x],
+                   cop_params_2[,,x], z_values[,x], marginal_fams[,x], marginal_params[,,x],
+                   maxit),
+          silent = TRUE
+        ))
+      }
+      failed_components <- which(vapply(CMS, inherits, logical(1), "try-error"))
+      if(length(failed_components) > 0){
+        failure_messages <- vapply(CMS[failed_components], function(err) conditionMessage(attr(err, "condition")), character(1))
+        stop("CM-step failed for component(s) ",
+             paste(failed_components, collapse = ", "),
+             ": ",
+             paste(unique(failure_messages), collapse = " | "))
+      }
       for(j in 1:total_comp){
         marginal_params[,,j] <- CMS[[j]]$marginal_par
         cop_params[,,j] <-  CMS[[j]]$cop_param
@@ -210,6 +241,3 @@ summary.vcmm_res <- function(object, ...) {
     mixture_probs = object$output$mixture_prob
   )
 }
-
-
-

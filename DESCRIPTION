@@ -20,8 +20,9 @@ Depends:
 Imports: 
   VineCopula (>= 2.4.2),
   fGarch,
+  future,
+  future.apply,
   univariateML,
-  parallel,
   stats,
   mclust
 Roxygen: list(markdown = TRUE)

@@ -59,44 +59,44 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
   total_features <- dim(data)[2]
   cop_param <- cop_params_j
   cop_param_2 <- cop_params_2_j
+  data_min <- apply(data, 2, min)
+  data_max <- apply(data, 2, max)
+  data_sd <- pmax(apply(data, 2, sd), sqrt(.Machine$double.eps))
   #CM-step 2
   for(p in 1:total_features){
     if(marginal_fam[p]=='Normal' || marginal_fam[p]=='Lognormal' || marginal_fam[p]=='Logistic'){
       marginal_par[2,p] <- log(marginal_par[2,p])
     }
-    else if(marginal_fam[p]=='Skew Normal'  || marginal_fam[p]=='Student-t' || marginal_fam[p]=='Skew Student-t'){
-      marginal_par <- marginal_par
-    }
-    else{
+    else if(marginal_fam[p]!='Skew Normal'  && marginal_fam[p]!='Student-t' && marginal_fam[p]!='Skew Student-t'){
       marginal_par[1,p] <- log(marginal_par[1,p])
       marginal_par[2,p] <- log(marginal_par[2,p])
     }
     pars <- marginal_par[,p]
     if(marginal_fam[p]=='Student-t'){
-      opt_margins <- optim(par=pars, CM_step_margin_params, lower = c(min(data[,p]), 0.01*sd(data[,p]), 2.0001),
-                           upper = c(max(data[,p]), 100*sd(data[,p]), 100), data=data, marginal_par=marginal_par, p=p,
+      opt_margins <- optim(par=pars, CM_step_margin_params, lower = c(data_min[p], 0.01 * data_sd[p], 2.0001),
+                           upper = c(data_max[p], 100 * data_sd[p], 100), data=data, marginal_par=marginal_par, p=p,
                            marginal_families=marginal_fam, z_values=z_value, vine_structures=vine_structure,
-                           family_sets=family_set, cop_params=cop_param, cop_params_2=cop_param_2, method = "L-BFGS-B",
+                           family_sets=family_set, cop_params_1=cop_param, cop_params_2=cop_param_2, method = "L-BFGS-B",
                            control = list(maxit=maxit))
     }
     else if(marginal_fam[p]=='Skew Normal'){
-      opt_margins <- optim(par=pars, CM_step_margin_params, lower = c(min(data[,p]), 0.01*sd(data[,p]), 0.0001),
-                           upper = c(max(data[,p]), 100*sd(data[,p]), 100), data=data, marginal_par=marginal_par, p=p,
+      opt_margins <- optim(par=pars, CM_step_margin_params, lower = c(data_min[p], 0.01 * data_sd[p], 0.0001),
+                           upper = c(data_max[p], 100 * data_sd[p], 100), data=data, marginal_par=marginal_par, p=p,
                            marginal_families=marginal_fam, z_values=z_value, vine_structures=vine_structure,
-                           family_sets=family_set, cop_params=cop_param, cop_params_2=cop_param_2, method = "L-BFGS-B",
+                           family_sets=family_set, cop_params_1=cop_param, cop_params_2=cop_param_2, method = "L-BFGS-B",
                            control = list(maxit=maxit))
     }
     else if(marginal_fam[p]=='Skew Student-t'){
-      opt_margins <- optim(par=pars, CM_step_margin_params, lower = c(min(data[,p]), 0.01*sd(data[,p]), 2.0001, 0.0001),
-                           upper = c(max(data[,p]), 100*sd(data[,p]), 100, 100), data=data, marginal_par=marginal_par, p=p,
+      opt_margins <- optim(par=pars, CM_step_margin_params, lower = c(data_min[p], 0.01 * data_sd[p], 2.0001, 0.0001),
+                           upper = c(data_max[p], 100 * data_sd[p], 100, 100), data=data, marginal_par=marginal_par, p=p,
                            marginal_families=marginal_fam, z_values=z_value, vine_structures=vine_structure,
-                           family_sets=family_set, cop_params=cop_param, cop_params_2=cop_param_2, method = "L-BFGS-B",
+                           family_sets=family_set, cop_params_1=cop_param, cop_params_2=cop_param_2, method = "L-BFGS-B",
                            control = list(maxit=maxit))
     }
     else{
       opt_margins <- optim(par=pars, CM_step_margin_params, data=data, marginal_par=marginal_par, p=p,
                            marginal_families=marginal_fam, z_values=z_value, vine_structures=vine_structure,
-                           family_sets=family_set, cop_params=cop_param, cop_params_2=cop_param_2, method = "BFGS",
+                           family_sets=family_set, cop_params_1=cop_param, cop_params_2=cop_param_2, method = "BFGS",
                            control = list(maxit=maxit))
 
     }
