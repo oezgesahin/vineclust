@@ -46,10 +46,6 @@ test_that("density functions for margins work", {
     0
   )
   expect_gte(
-    min(pdf_cdf_quant_margin(x_data, "Weibull", pars, "pdf")),
-    0
-  )
-  expect_gte(
     min(pdf_cdf_quant_margin(x_data, "Skew Normal", c(1,2,1), "pdf")),
     0
   )
@@ -89,10 +85,6 @@ test_that("distribution functions for margins work", {
     0
   )
   expect_gte(
-    min(pdf_cdf_quant_margin(x_data, "Weibull", pars, "cdf")),
-    0
-  )
-  expect_gte(
     min(pdf_cdf_quant_margin(x_data, "Skew Normal", c(1,2,1), "cdf")),
     0
   )
@@ -126,10 +118,6 @@ test_that("distribution functions for margins work", {
   )
   expect_lte(
     max(pdf_cdf_quant_margin(x_data, "Normal", pars, "cdf")),
-    1
-  )
-  expect_lte(
-    max(pdf_cdf_quant_margin(x_data, "Weibull", pars, "cdf")),
     1
   )
   expect_lte(
@@ -172,10 +160,6 @@ test_that("quantile functions for margins work", {
     "double"
   )
   expect_type(
-    pdf_cdf_quant_margin(prob, "Weibull", pars, "quant"),
-    "double"
-  )
-  expect_type(
     pdf_cdf_quant_margin(prob, "Skew Normal", c(1,2,1), "quant"),
     "double"
   )
@@ -210,6 +194,10 @@ test_that("incompatible family sets fail clearly", {
 test_that("unsupported margins fail explicitly", {
   expect_error(
     pdf_cdf_quant_margin(c(0.2, 0.5), "NotAMargin", c(1, 2), "cdf"),
+    "Unsupported marginal distribution"
+  )
+  expect_error(
+    pdf_cdf_quant_margin(c(0.2, 0.5), "Weibull", c(1, 2), "cdf"),
     "Unsupported marginal distribution"
   )
   expect_error(

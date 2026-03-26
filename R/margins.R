@@ -38,7 +38,7 @@ regularize_margin_params <- function(fam, params, scale_floor){
   if(fam %in% c("Normal", "Lognormal", "Logistic", "Cauchy", "Skew Normal", "Student-t", "Skew Student-t")){
     params[2] <- max(params[2], scale_floor)
   }
-  if(fam %in% c("Gamma", "Loglogistic", "Weibull")){
+  if(fam %in% c("Gamma", "Loglogistic")){
     params[1] <- max(params[1], scale_floor)
     params[2] <- max(params[2], scale_floor)
   }
@@ -69,7 +69,6 @@ pdf_cdf_quant_margin <- function(data, dist_name, params, value_name){
                           "Skew Normal" = 3,
                           "Student-t" = 3,
                           "Skew Student-t" = 4,
-                          "Weibull" = 2,
                           NULL)
   if(is.null(required_pars)){
     stop("Unsupported marginal distribution: ", dist_name)
@@ -88,7 +87,7 @@ pdf_cdf_quant_margin <- function(data, dist_name, params, value_name){
      params[2] <= 0){
     stop("Scale parameters must be strictly positive")
   }
-  if(dist_name %in% c("Gamma", "Loglogistic", "Weibull") && any(params[1:2] <= 0)){
+  if(dist_name %in% c("Gamma", "Loglogistic") && any(params[1:2] <= 0)){
     stop("Shape and rate/scale parameters must be strictly positive")
   }
   if(dist_name %in% c("Student-t", "Skew Student-t") && params[3] <= 0){
@@ -147,11 +146,7 @@ pdf_cdf_quant_margin <- function(data, dist_name, params, value_name){
                    "Skew Student-t" = switch(value_name,
                                              cdf = fGarch::psstd(data, mean = params[1], sd = params[2], nu = params[3], xi = params[4]),
                                              pdf = fGarch::dsstd(data, mean = params[1], sd = params[2], nu = params[3], xi = params[4]),
-                                             quant = fGarch::qsstd(data, mean = params[1], sd = params[2], nu = params[3], xi = params[4])),
-                   "Weibull" = switch(value_name,
-                                      cdf = stats::pweibull(data, shape = params[1], scale = params[2]),
-                                      pdf = stats::dweibull(data, shape = params[1], scale = params[2]),
-                                      quant = stats::qweibull(data, shape = params[1], scale = params[2])))
+                                             quant = fGarch::qsstd(data, mean = params[1], sd = params[2], nu = params[3], xi = params[4])))
   values
 }
 
@@ -160,8 +155,8 @@ pdf_cdf_quant_margin <- function(data, dist_name, params, value_name){
 fit_margin <- function(data, min_value, margin_fam){
   data <- normalize_margin_data(data)
   min_value <- min(data)
-  all_fams <- c('norm', 'logis', 'gamma', 'lnorm', 'llogis', 'cauchy', 'weibull')
-  positive_support_fams <- c('gamma', 'lnorm', 'llogis', 'weibull')
+  all_fams <- c('norm', 'logis', 'gamma', 'lnorm', 'llogis', 'cauchy')
+  positive_support_fams <- c('gamma', 'lnorm', 'llogis')
   use_all_fams <- length(margin_fam) == 1 && is.na(margin_fam)
   requested_fams <- character(0)
   if(!use_all_fams){

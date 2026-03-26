@@ -55,7 +55,7 @@ initial_args_check <- function(data, total_comp, is_cvine, init_vinestr, init_tr
       stop("truncation level must be smaller than (number of variables (p) - 1)")
   }
 
-  if(!all(is.element(init_mar, c(NA, 'std', 'norm', 'logis', 'gamma', 'lnorm', 'llogis', 'snorm', 'sstd', 'cauchy', 'weibull'))))
+  if(!all(is.element(init_mar, c(NA, 'std', 'norm', 'logis', 'gamma', 'lnorm', 'llogis', 'snorm', 'sstd', 'cauchy'))))
     stop("Marginal distribution set has not yet been implemented")
 
   if(!all(is.element(init_bicop, c(NA,1,2,3,4,5,6,7,8,10,13,14,16,17,18,20,23,24,26,27,28,30,33,34,36,37,38,40))))
@@ -128,7 +128,7 @@ mar_RVM_check <- function(margin, margin_pars, RVMs){
   }
 
   if(!all(is.element(c(margin), c('Cauchy', 'Student-t', 'Normal', 'Logistic', 'Gamma',
-                                  'Lognormal', 'Loglogistic', 'Skew Normal', 'Skew Student-t', 'Weibull'))))
+                                  'Lognormal', 'Loglogistic', 'Skew Normal', 'Skew Student-t'))))
     stop("marginal distribution has not yet been implemented")
 
   if(is.null(dim(margin_pars)[1])){
