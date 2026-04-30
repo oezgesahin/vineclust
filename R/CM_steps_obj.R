@@ -23,6 +23,10 @@ CM_step_margin_params <- function(pars, data, marginal_par, p, marginal_families
     marginal_par[1,p] <- pars[1]
     marginal_par[2,p] <- exp(pars[2])
   }
+  else if(marginal_families[p]=='Cauchy'){
+    marginal_par[1,p] <- pars[1]
+    marginal_par[2,p] <- exp(pars[2])
+  }
   else if(marginal_families[p]=='Skew Normal'  || marginal_families[p]=='Student-t'){
     marginal_par[1,p] <- pars[1]
     marginal_par[2,p] <- pars[2]
@@ -67,6 +71,9 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
     if(marginal_fam[p]=='Normal' || marginal_fam[p]=='Lognormal' || marginal_fam[p]=='Logistic'){
       marginal_par[2,p] <- log(marginal_par[2,p])
     }
+    else if(marginal_fam[p]=='Cauchy'){
+      marginal_par[2,p] <- log(marginal_par[2,p])
+    }
     else if(marginal_fam[p]!='Skew Normal'  && marginal_fam[p]!='Student-t' && marginal_fam[p]!='Skew Student-t'){
       marginal_par[1,p] <- log(marginal_par[1,p])
       marginal_par[2,p] <- log(marginal_par[2,p])
@@ -77,6 +84,12 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
                            upper = c(data_max[p], 100 * data_sd[p], 100), data=data, marginal_par=marginal_par, p=p,
                            marginal_families=marginal_fam, z_values=z_value, vine_structures=vine_structure,
                            family_sets=family_set, cop_params_1=cop_param, cop_params_2=cop_param_2, method = "L-BFGS-B",
+                           control = list(maxit=maxit))
+    }
+    else if(marginal_fam[p]=='Cauchy'){
+      opt_margins <- optim(par=pars, CM_step_margin_params, data=data, marginal_par=marginal_par, p=p,
+                           marginal_families=marginal_fam, z_values=z_value, vine_structures=vine_structure,
+                           family_sets=family_set, cop_params_1=cop_param, cop_params_2=cop_param_2, method = "BFGS",
                            control = list(maxit=maxit))
     }
     else if(marginal_fam[p]=='Skew Normal'){
@@ -102,6 +115,10 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
     }
     optimized_par <- opt_margins$par
     if(marginal_fam[p]=='Normal' || marginal_fam[p]=='Lognormal' || marginal_fam[p]=='Logistic'){
+      marginal_par[2,p]  <- exp(optimized_par[2])
+      marginal_par[1,p]  <- optimized_par[1]
+    }
+    else if(marginal_fam[p]=='Cauchy'){
       marginal_par[2,p]  <- exp(optimized_par[2])
       marginal_par[1,p]  <- optimized_par[1]
     }

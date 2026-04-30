@@ -30,3 +30,25 @@ test_that("CM-steps 2 and 3 work", {
   expect_type(fit$cop_param_2, "double")
   expect_type(fit$u_data, "double")
 })
+
+test_that("CM-step handles negative-location Cauchy margins", {
+  set.seed(222)
+  cauchy_data <- data.frame(
+    x1 = rcauchy(200, location = -40, scale = 20),
+    x2 = rnorm(200, mean = 3, sd = 1.5)
+  )
+  fit <- CM_steps(
+    data = cauchy_data,
+    vine_structure = matrix(c(1, 2, 0, 2), 2, 2),
+    family_set = matrix(c(0, 1, 0, 0), 2, 2),
+    cop_params_j = matrix(c(0, 0.2, 0, 0), 2, 2),
+    cop_params_2_j = matrix(0, 2, 2),
+    z_value = rep(0.5, 200),
+    marginal_fam = c("Cauchy", "Normal"),
+    marginal_par = matrix(c(-35, 18, 0, 0, 3, 1.5, 0, 0), 4, 2),
+    maxit = 2
+  )
+  expect_true(all(is.finite(fit$marginal_par[, 1])))
+  expect_lt(fit$marginal_par[1, 1], 0)
+  expect_gt(fit$marginal_par[2, 1], 0)
+})
