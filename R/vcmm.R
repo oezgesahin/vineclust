@@ -180,7 +180,7 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
                    cop_params_2[,,x], z_values[,x], marginal_fams[,x], marginal_params[,,x],
                    maxit),
           silent = TRUE
-        ), future.scheduling = 1)
+        ), future.scheduling = 1, future.seed = TRUE)
       }
       else{
         CMS <- lapply(1:total_comp, function(x) try(
