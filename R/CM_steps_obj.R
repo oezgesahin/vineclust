@@ -67,20 +67,23 @@ assign_margin_params <- function(marginal_par, p, fam, params){
 
 #' internal function
 #' @noRd
-margin_params_admissible <- function(fam, params, data, scale_floor){
+bound_margin_params <- function(fam, params, data, scale_floor){
   data_sd <- max(sd(data), scale_floor)
   max_scale <- max(100 * data_sd, 10 * scale_floor)
   if(fam %in% c("Normal", "Lognormal", "Logistic", "Cauchy", "Skew Normal", "Student-t", "Skew Student-t") &&
-     params[2] > max_scale){
-    return(FALSE)
+     length(params) >= 2){
+    params[2] <- min(max(params[2], scale_floor), max_scale)
   }
-  if(fam %in% c("Student-t", "Skew Student-t") && params[3] > 100){
-    return(FALSE)
+  if(fam %in% c("Student-t", "Skew Student-t") && length(params) >= 3){
+    params[3] <- min(max(params[3], 2.0001), 100)
   }
-  if(fam %in% c("Skew Normal", "Skew Student-t") && params[margin_param_count(fam)] > 100){
-    return(FALSE)
+  if(fam == "Skew Normal" && length(params) >= 3){
+    params[3] <- min(max(params[3], scale_floor), 100)
   }
-  TRUE
+  if(fam == "Skew Student-t" && length(params) >= 4){
+    params[4] <- min(max(params[4], scale_floor), 100)
+  }
+  params
 }
 
 #' internal function
@@ -111,9 +114,7 @@ CM_step_margin_params <- function(pars, data, marginal_par, p, marginal_families
     return(penalty_value)
   }
   decoded_pars <- regularize_margin_params(fam, decoded_pars, scale_floor)
-  if(!margin_params_admissible(fam, decoded_pars, data[, p], scale_floor)){
-    return(penalty_value)
-  }
+  decoded_pars <- bound_margin_params(fam, decoded_pars, data[, p], scale_floor)
   marginal_par <- assign_margin_params(marginal_par, p, fam, decoded_pars)
   u_data <- tryCatch(
     sapply(1:total_features, function(x) pdf_cdf_quant_margin(data[,x],marginal_families[x],
@@ -164,6 +165,7 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
     fam <- marginal_fam[p]
     scale_floor <- margin_scale_floor(data[, p])
     current_pars <- regularize_margin_params(fam, marginal_par[, p], scale_floor)
+    current_pars <- bound_margin_params(fam, current_pars, data[, p], scale_floor)
     marginal_par <- assign_margin_params(marginal_par, p, fam, current_pars)
     pars <- encode_margin_params(current_pars, fam, scale_floor)
     opt_margins <- optim(par=pars, CM_step_margin_params, data=data, marginal_par=marginal_par, p=p,
@@ -176,15 +178,12 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
            " (", fam, ")")
     }
   optimized_margin_par <- decode_margin_params(optimized_par, fam)
-  if(any(!is.finite(optimized_margin_par))){
+    if(any(!is.finite(optimized_margin_par))){
       stop("Non-finite transformed marginal parameters for variable ", p,
            " (", fam, ")")
     }
     optimized_margin_par <- regularize_margin_params(fam, optimized_margin_par, scale_floor)
-    if(!margin_params_admissible(fam, optimized_margin_par, data[, p], scale_floor)){
-      stop("Inadmissible transformed marginal parameters for variable ", p,
-           " (", fam, ")")
-    }
+    optimized_margin_par <- bound_margin_params(fam, optimized_margin_par, data[, p], scale_floor)
     marginal_par <- assign_margin_params(marginal_par, p, fam, optimized_margin_par)
   }
   #CM-step 3

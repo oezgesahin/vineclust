@@ -49,6 +49,8 @@ test_that("CM-steps 2 and 3 work", {
   expect_type(fit$cop_param, "double")
   expect_type(fit$cop_param_2, "double")
   expect_type(fit$u_data, "double")
+  expect_lte(fit$marginal_par[2, 2], max(100 * sd(x_data[[2]]), 10 * margin_scale_floor(x_data[[2]])))
+  expect_lte(fit$marginal_par[3, 2], 100)
 })
 
 test_that("CM-step keeps log-scale-constrained parameters admissible", {
