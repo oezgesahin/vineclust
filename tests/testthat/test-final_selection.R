@@ -32,3 +32,12 @@ test_that("final model selection works properly", {
   expect_type(fit$bicop_param2, "double")
   expect_type(fit$z_values, "double")
 })
+
+test_that("final selection handles tied hard assignments deterministically", {
+  tied_probs <- matrix(c(rep(0.9, 99), 0.5, rep(0.1, 100), rep(0.1, 99), 0.5, rep(0.9, 100)), 200, 2)
+  fit <- final_selection(data=x_data, total_cluster=2, final_cvine=NA, final_vinestr=NA,
+                         final_trunclevel=NA, mix_probs=c(0.5, 0.5),
+                         p_probs=tied_probs,
+                         iteration=1, init_method="gmm", final_mar=NA, final_bicop=NA)
+  expect_equal(rowSums(fit$z_values), rep(1, 200))
+})

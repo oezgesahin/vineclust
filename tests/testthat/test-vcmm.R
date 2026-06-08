@@ -28,6 +28,20 @@ test_that("catches incorrect input", {
 
 fit <- vcmm(x_data, 2)
 
+test_that("posterior probabilities stay normalized when a row underflows", {
+  posterior <- safe_posterior_probs(matrix(c(0, 0, 0.2, 0.8), 2, 2, byrow = TRUE))
+  expect_equal(posterior$z_values[1, ], c(0.5, 0.5))
+  expect_equal(posterior$z_values[2, ], c(0.2, 0.8))
+  expect_equal(rowSums(posterior$z_values), c(1, 1))
+})
+
+test_that("hard assignments break ties deterministically", {
+  expect_equal(
+    hard_cluster_assignments(matrix(c(0.5, 0.5, 0.1, 0.9), 2, 2, byrow = TRUE)),
+    c(1, 2)
+  )
+})
+
 test_that("returns correct 'vcmm_res' object", {
   expect_s3_class(fit, "vcmm_res")
   expect_identical(
@@ -71,4 +85,3 @@ test_that("other maxit works", {
     "character"
   )
 })
-

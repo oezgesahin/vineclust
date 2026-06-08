@@ -6,7 +6,7 @@ final_selection <- function(data, total_cluster, final_cvine, final_vinestr, fin
   if(is.na(final_trunclevel)) final_trunclevel <- ncol(data) - 1
   if(all(is.na(final_bicop))) final_bicop <- c(1,2,3,4,5,6,7,8,10,13,14,16,17,18,
                                                20,23,24,26,27,28,30,33,34,36,37,38,40)
-  data <- cbind(data, apply(p_probs,1,function(x) which(x==max(x))))
+  data <- cbind(data, hard_cluster_assignments(p_probs))
   total_obs <- dim(data)[1]
   total_features <- dim(data)[2]-1
   data_cluster <- list()
@@ -73,8 +73,10 @@ final_selection <- function(data, total_cluster, final_cvine, final_vinestr, fin
     total_margin_dens[,j] <- density
   }
   lik_points <-sapply(1:total_cluster, function(j) mix_probs[j]*total_margin_dens[,j]*rvine_densities[,j])
-  lik_per_obs <- apply(lik_points, 1, sum)
-  z_values <- lik_points/rep(lik_per_obs, total_cluster)
+  posterior_step <- safe_posterior_probs(lik_points)
+  lik_points <- posterior_step$lik_points
+  lik_per_obs <- posterior_step$lik_per_obs
+  z_values <- posterior_step$z_values
   loglik <- sum(log(lik_per_obs))
   total_mar_pars <- 0
   for(j in 1:total_cluster){
@@ -88,7 +90,7 @@ final_selection <- function(data, total_cluster, final_cvine, final_vinestr, fin
   total_mix_pars <- total_cluster-1
   total_pars <- total_mar_pars + total_cop_pars + total_mix_pars
   bic_cop <- (-2)*loglik + log(total_obs)*total_pars
-  class <- apply(z_values,1,function(x) which(x==max(x)))
+  class <- hard_cluster_assignments(z_values)
   const <- 0
   if(length(unique(class)) == total_cluster){
     for(i in 1:total_obs){

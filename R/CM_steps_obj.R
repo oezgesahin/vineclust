@@ -1,5 +1,19 @@
 #' internal function
 #' @noRd
+margin_param_count <- function(fam){
+  if(fam == "Skew Student-t") return(4L)
+  if(fam %in% c("Skew Normal", "Student-t")) return(3L)
+  2L
+}
+
+#' internal function
+#' @noRd
+trim_u_data <- function(u_data){
+  pmin(pmax(u_data, .Machine$double.eps), 1 - .Machine$double.eps)
+}
+
+#' internal function
+#' @noRd
 rvine_density <- function(data, vine_structures, family_sets,
                           cop_params_1, cop_params_2){
   RVM <- VineCopula::RVineMatrix(Matrix=vine_structures,family=family_sets,
@@ -18,7 +32,7 @@ CM_step_margin_params <- function(pars, data, marginal_par, p, marginal_families
                                   z_values, vine_structures, family_sets,
                                   cop_params_1, cop_params_2){
   total_features <- dim(data)[2]
-  pars <- matrix(pars, 4, 1)
+  pars <- as.numeric(pars[seq_len(margin_param_count(marginal_families[p]))])
   if(marginal_families[p]=='Normal' || marginal_families[p]=='Lognormal' || marginal_families[p]=='Logistic'){
     marginal_par[1,p] <- pars[1]
     marginal_par[2,p] <- exp(pars[2])
@@ -44,6 +58,7 @@ CM_step_margin_params <- function(pars, data, marginal_par, p, marginal_families
   }
   u_data <- sapply(1:total_features, function(x) pdf_cdf_quant_margin(data[,x],marginal_families[x],
                                                                 marginal_par[,x], 'cdf'))
+  u_data <- trim_u_data(u_data)
   rvine_densities <- rvine_density(u_data, vine_structures, family_sets, cop_params_1, cop_params_2)
   margin_densities <- sapply(1:total_features, function(x) pdf_cdf_quant_margin(data[,x],marginal_families[x],
                                                                          marginal_par[,x], 'pdf'))
@@ -78,7 +93,7 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
       marginal_par[1,p] <- log(marginal_par[1,p])
       marginal_par[2,p] <- log(marginal_par[2,p])
     }
-    pars <- marginal_par[,p]
+    pars <- marginal_par[seq_len(margin_param_count(marginal_fam[p])),p]
     if(marginal_fam[p]=='Student-t'){
       opt_margins <- optim(par=pars, CM_step_margin_params, lower = c(data_min[p], 0.01 * data_sd[p], 2.0001),
                            upper = c(data_max[p], 100 * data_sd[p], 100), data=data, marginal_par=marginal_par, p=p,
@@ -114,6 +129,10 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
 
     }
     optimized_par <- opt_margins$par
+    if(any(!is.finite(optimized_par))){
+      stop("Non-finite optimized marginal parameters for variable ", p,
+           " (", marginal_fam[p], ")")
+    }
     if(marginal_fam[p]=='Normal' || marginal_fam[p]=='Lognormal' || marginal_fam[p]=='Logistic'){
       marginal_par[2,p]  <- exp(optimized_par[2])
       marginal_par[1,p]  <- optimized_par[1]
@@ -141,6 +160,7 @@ CM_steps <- function(data, vine_structure, family_set, cop_params_j, cop_params_
   #CM-step 3
   udata <- sapply(1:total_features, function(x) pdf_cdf_quant_margin(data[,x],marginal_fam[x],
                                                                marginal_par[,x], 'cdf'))
+  udata <- trim_u_data(udata)
   RVM <- VineCopula::RVineMatrix(Matrix=vine_structure,family=family_set, par=cop_param, par2=cop_param_2)
   seq_RVM <-VineCopula::RVineSeqEst(udata, RVM, weights=z_value,  progress=FALSE)
   cop_param <- seq_RVM$par

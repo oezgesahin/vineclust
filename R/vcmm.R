@@ -102,6 +102,22 @@
 #' @importFrom fGarch psnorm dsnorm pstd dstd psstd dsstd
 #' @importFrom stats dgamma dlnorm dlogis dnorm dcauchy kmeans optim pgamma plnorm plogis pnorm pcauchy sd
 
+safe_posterior_probs <- function(lik_points){
+  total_comp <- ncol(lik_points)
+  lik_per_obs <- rowSums(lik_points)
+  invalid_rows <- !is.finite(lik_per_obs) | lik_per_obs <= 0
+  if(any(invalid_rows)){
+    lik_points[invalid_rows, ] <- 1 / total_comp
+    lik_per_obs[invalid_rows] <- 1
+  }
+  z_values <- sweep(lik_points, 1, lik_per_obs, "/")
+  list("lik_points" = lik_points, "lik_per_obs" = lik_per_obs, "z_values" = z_values)
+}
+
+hard_cluster_assignments <- function(prob_matrix){
+  max.col(as.matrix(prob_matrix), ties.method = "first")
+}
+
 vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA, bicop=NA,
                  methods=c('kmeans'),  threshold=0.0001, maxit=10, cores=1){
   initial_df_check(data)
@@ -112,7 +128,7 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
   final_trunclevel <- NA
   final_mar <- mar
   final_bicop <- bicop
-  winner_bic <- 1000000
+  winner_bic <- Inf
   use_future <- cores > 1 && total_comp > 1
   if(use_future){
     old_plan <- future::plan()
@@ -156,8 +172,10 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
         total_margin_dens[,j] <- density
       }
       lik_points <-sapply(1:total_comp, function(j) mix_probs[j]*total_margin_dens[,j]*rvine_densities[,j])
-      lik_per_obs <- apply(lik_points, 1, sum)
-      lik_per_obs[which(lik_per_obs == 0)] <- 1e-100
+      posterior_step <- safe_posterior_probs(lik_points)
+      lik_points <- posterior_step$lik_points
+      lik_per_obs <- posterior_step$lik_per_obs
+      z_values <- posterior_step$z_values
       loglik <- sum(log(lik_per_obs))
       loglik_res[iteration] <- loglik
       if(iteration > 2){
@@ -169,7 +187,6 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
       }
       #if(((iteration-1) - floor((iteration-1)/10)*10)==0 & (iteration-1) > 0) cat(iteration-1, "ECM iterations are complete", "\n")
       #E-step
-      z_values <- lik_points/rep(lik_per_obs, total_comp)
       #CM-steps:
       #CM-step 1
       mix_probs <- CM_step_mixture_probs(z_values)
@@ -211,11 +228,11 @@ vcmm <- function(data, total_comp, is_cvine=NA, vinestr=NA, trunclevel=1, mar=NA
     final_out <- final_selection(data, total_comp, final_cvine, final_vinestr, final_trunclevel, mix_probs, z_values,
                                  iteration, method, final_mar, final_bicop)
     vcmm_bic <- final_out$bic
-    if(vcmm_bic < winner_bic){
-      winner_bic <- vcmm_bic
-      out <- final_out
-      vcmm_class <- apply(out$z_values,1,function(x) which(x==max(x)))
-    }
+      if(vcmm_bic < winner_bic){
+        winner_bic <- vcmm_bic
+        out <- final_out
+        vcmm_class <- hard_cluster_assignments(out$z_values)
+      }
   }
   winner_bic <- round(winner_bic, 0)
   out_list <- list("output"=out, "cluster"=vcmm_class)
